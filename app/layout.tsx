@@ -2,6 +2,7 @@ import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -27,8 +28,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <Navbar />
+          <Navbar />
+          <main className="min-h-screen flex w-2/3">
+            <Sidebar className="w-1/3" />
             {children}
           </main>
         </ThemeProvider>
