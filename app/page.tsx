@@ -5,6 +5,8 @@ import ConnectSupabaseSteps from "@/components/tutorial/ConnectSupabaseSteps";
 import SignUpUserSteps from "@/components/tutorial/SignUpUserSteps";
 import Header from "@/components/Header";
 import { redirect } from "next/navigation";
+import getAllData from "@/lib/actions/getAllData";
+import { ToggleTheme } from "@/components/ToggleTheme";
 
 export default async function Index() {
   const supabase = createClient();
@@ -14,12 +16,16 @@ export default async function Index() {
     redirect("/login");
   }
 
+  const songs = await getAllData();
+  console.log(songs);
+
   return (
     <div className="flex-1 w-full flex flex-col gap-20 items-center">
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
           <DeployButton />
           {data.user && <AuthButton />}
+          <ToggleTheme />
         </div>
       </nav>
 
@@ -28,6 +34,9 @@ export default async function Index() {
         <main className="flex-1 flex flex-col gap-6">
           <h2 className="font-bold text-4xl mb-4">Next steps</h2>
           {data.user ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
+          <div>Artists</div>
+          <div>Albums</div>
+          <div>Songs</div>
         </main>
       </div>
 
