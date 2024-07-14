@@ -29,8 +29,8 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <Navbar />
-          <main className="min-h-screen flex w-2/3">
-            <Sidebar className="w-1/3" />
+          <main className="min-h-screen flex">
+            <Sidebar className="w-1/5" />
             {children}
           </main>
         </ThemeProvider>
