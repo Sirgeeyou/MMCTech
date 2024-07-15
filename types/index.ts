@@ -13,6 +13,7 @@ export interface Song {
 
 export interface Album {
   id: number;
+  artist_id: number;
   title: string;
   songs: Song[];
   description: string;
