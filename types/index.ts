@@ -17,6 +17,7 @@ export interface Album {
   title: string;
   songs: Song[];
   description: string;
+  artists?: { name: string };
 }
 
 export interface Artist {

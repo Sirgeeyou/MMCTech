@@ -45,14 +45,13 @@ function AlbumPopover({
             {songs && (
               <ul>
                 {songs.map((song) => (
-                  <>
-                    <div className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2">
-                      <li key={song.id} className="py-1.5">
-                        {song.title}
-                      </li>
-                      <span>{song.length.slice(0, -3)}</span>
-                    </div>
-                  </>
+                  <div
+                    className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
+                    key={song.id}
+                  >
+                    <li className="py-1.5">{song.title}</li>
+                    <span>{song.length.slice(0, -3)}</span>
+                  </div>
                 ))}
               </ul>
             )}
