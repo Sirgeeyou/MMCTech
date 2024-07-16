@@ -17,7 +17,6 @@ export interface Album {
   title: string;
   songs: Song[];
   description: string;
-  artists?: { name: string };
 }
 
 export interface Artist {
@@ -26,8 +25,28 @@ export interface Artist {
   albums: Album[];
 }
 
+export interface Artist2 {
+  name: string;
+}
+
 export interface SectionWrapperProps<T> {
   data: T[];
   title: string;
   dataKey: keyof T;
+}
+
+export interface AlbumDetails {
+  title: any;
+  description: any;
+  songs: {
+    id: any;
+    title: any;
+    length: any;
+  }[];
+  artists:
+    | {
+        id: string;
+        name: any;
+      }
+    | { id: string; name: any }[];
 }
