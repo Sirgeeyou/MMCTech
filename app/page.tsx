@@ -1,9 +1,9 @@
 import LatestArtists from "@/components/LatestArtists";
 import LatestMusic from "@/components/LatestMusic";
 import PopularAlbums from "@/components/PopularAlbums";
-import getAlbums from "@/lib/actions/albums";
-import getArtists from "@/lib/actions/artists";
-import getSongs from "@/lib/actions/songs";
+import { getAlbums } from "@/lib/actions/albums";
+import { getArtists } from "@/lib/actions/artists";
+import { getSongs } from "@/lib/actions/songs";
 
 export default async function HomePage() {
   const artists = await getArtists();

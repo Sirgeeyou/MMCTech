@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 
-export default async function getAlbums() {
+export async function getAlbums() {
   const supabase = createClient();
 
   const { data } = await supabase.from("albums").select("*");

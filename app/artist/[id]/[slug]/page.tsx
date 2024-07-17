@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Link from "next/link";
 
 export default async function page({ ...props }) {
   const artistName = props.params.slug;
@@ -15,7 +16,7 @@ export default async function page({ ...props }) {
         <h1 className="font-bold text-4xl">{artistName}</h1>
       </div>
       <div className="flex flex-col gap-4">
-        <h2 className="mt-8 text-neutral-500">
+        <h2 className="mt-8 text-neutral-500 pl-6">
           Albums available by {artistName}
         </h2>
         {data?.map((album) => (
@@ -33,13 +34,14 @@ export default async function page({ ...props }) {
                 <p className="text-neutral-500">{album.description}</p>
                 <ul className="mt-5">
                   {album.songs.map((song) => (
-                    <div
+                    <Link
+                      href={`/song/${song.id}`}
                       className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
                       key={song.id}
                     >
                       <li className="py-1.5">{song.title}</li>
                       <span>{song.length.slice(0, -3)}</span>
-                    </div>
+                    </Link>
                   ))}
                 </ul>
               </AccordionContent>

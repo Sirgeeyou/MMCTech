@@ -1,4 +1,5 @@
 import { getAlbumDetails } from "@/lib/actions/albums";
+import Link from "next/link";
 
 export default async function page({ ...props }) {
   const data = await getAlbumDetails(props.params.id);
@@ -20,13 +21,14 @@ export default async function page({ ...props }) {
             {data.songs && (
               <ul>
                 {data.songs.map((song) => (
-                  <div
-                    className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
+                  <Link
+                    href={`/song/${song.id}`}
                     key={song.id}
+                    className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
                   >
                     <li className="py-1.5">{song.title}</li>
                     <span>{song.length.slice(0, -3)}</span>
-                  </div>
+                  </Link>
                 ))}
               </ul>
             )}

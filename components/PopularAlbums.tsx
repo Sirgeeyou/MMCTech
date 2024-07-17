@@ -17,7 +17,6 @@ function PopularAlbums({ albums }: { albums: Album[] }) {
             <Card className="sm:h-40 sm:w-40 h-32 w-32 hover:bg-accent">
               <CardContent className="flex aspect-square items-center justify-center p-6">
                 <span className="font-semibold">{album.title}</span>
-                <span>{album.artist_id}</span>
               </CardContent>
             </Card>
           </Link>
