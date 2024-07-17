@@ -1,15 +1,16 @@
-import { Artist } from "@/types";
+import { Tables } from "@/types/types_db";
 import { Avatar, AvatarImage, AvatarFallback } from "@radix-ui/react-avatar";
 import Link from "next/link";
 import React from "react";
+
+interface Artist extends Tables<"artists"> {}
 
 function LatestArtists({ artists }: { artists: Artist[] }) {
   return (
     <section>
       <h1 className="my-10 ml-5 text-3xl">Popular Artists</h1>
-
       <div className="flex gap-12 mx-4 ">
-        {artists.map((artist) => (
+        {artists?.map((artist) => (
           <Link key={artist.id} href={`/artist/${artist.id}/${artist.name}`}>
             <div className="flex flex-col hover:bg-accent rounded-md">
               <Avatar className="md:h-56 md:w-56 h-32 w-32 px-3">

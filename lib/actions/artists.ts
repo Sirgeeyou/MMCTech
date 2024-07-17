@@ -2,6 +2,13 @@
 
 import { createClient } from "@/utils/supabase/server";
 
+export default async function getArtists() {
+  const supabase = createClient();
+
+  const { data } = await supabase.from("artists").select("*");
+  return data || [];
+}
+
 export async function getArtistRelatedMusic(artistId: number) {
   const supabase = createClient();
   const { data, error } = await supabase
@@ -14,5 +21,5 @@ export async function getArtistRelatedMusic(artistId: number) {
     return null; // or handle the error as needed
   }
 
-  return data;
+  return data || [];
 }

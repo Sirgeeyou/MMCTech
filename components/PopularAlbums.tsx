@@ -1,9 +1,11 @@
 "use client";
 
-import { Album } from "@/types";
 import React from "react";
 import { Card, CardContent } from "./ui/card";
 import Link from "next/link";
+import { Tables } from "@/types/types_db";
+
+interface Album extends Tables<"albums"> {}
 
 function PopularAlbums({ albums }: { albums: Album[] }) {
   return (

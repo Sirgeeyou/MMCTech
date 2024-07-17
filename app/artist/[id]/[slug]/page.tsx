@@ -1,4 +1,4 @@
-import { getArtistRelatedMusic } from "@/lib/actions/getArtistRelatedMusic";
+import { getArtistRelatedMusic } from "@/lib/actions/artists";
 import {
   Accordion,
   AccordionContent,
@@ -7,10 +7,8 @@ import {
 } from "@/components/ui/accordion";
 
 export default async function page({ ...props }) {
-  console.log(props.params.slug);
   const artistName = props.params.slug;
   const data = await getArtistRelatedMusic(props.params.id)!;
-  console.log(data);
   return (
     <main className="w-4/5 overflow-hidden flex flex-col rounded-md">
       <div className="w-full bg-gradient-to-r from-slate-500 to-transparent pl-6 py-10">
