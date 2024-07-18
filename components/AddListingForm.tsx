@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import {
   FormField,
   FormItem,
@@ -338,7 +338,7 @@ function AddListingForm({
           </Button>
 
           <span
-            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 px-3 hover:cursor-pointer"
+            className={buttonVariants({ variant: "secondary" })}
             onClick={() => setIsOpen(false)}
           >
             Cancel

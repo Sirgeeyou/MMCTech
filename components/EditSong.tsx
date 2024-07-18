@@ -7,12 +7,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Button, buttonVariants } from "./ui/button";
 
 function EditSong() {
   return (
     <div>
       <Dialog>
-        <DialogTrigger className="btn btn-secondary">dasdsada</DialogTrigger>
+        <DialogTrigger>
+          <span className={buttonVariants({ variant: "secondary" })}>
+            dsadasd
+          </span>
+        </DialogTrigger>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Are you absolutely sure?</DialogTitle>
