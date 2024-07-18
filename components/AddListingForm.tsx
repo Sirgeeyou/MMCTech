@@ -20,25 +20,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useEffect, useState } from "react";
-import { formatLength } from "@/utils/helpers/formatLength";
 import { createSong } from "@/lib/actions/songs";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { toast } from "sonner";
+import { formatLength } from "@/utils/helpers/formatLength";
+import { calculateLengthForAlbum } from "@/utils/helpers/calculateAlbumSongsLength";
+import { createAlbum } from "@/lib/actions/albums";
 
 // Define schemas
 const songSchema = z.object({
-  songName: z.string().min(1, "Song name is required."),
+  title: z.string().min(1, "Song name is required."),
   minutes: z.coerce.number().min(0).max(60, "1 hour per song allowed."),
-  seconds: z.coerce
-    .number()
-    .min(10, "Song can not be less than 10 seconds.")
-    .max(59, "No more than 59 seconds"),
+  seconds: z.coerce.number().max(59, "No more than 59 seconds"),
 });
 
 const albumSchema = z.object({
   category: z.literal("album"),
   artist: z.string().min(1, "Artist name is required."),
   album: z.string().min(1, "Album name is required."),
+  description: z.string().max(250, "Please write a shorter description."),
   songs: z.array(songSchema).nonempty("At least one song is required."),
 });
 
@@ -62,10 +62,11 @@ function AddListingForm({
   const defaultValues: FormSchemaType = {
     category: "song",
     artist: "",
-    songName: "",
+    title: "",
     minutes: 0,
     seconds: 0,
     album: "",
+    description: "",
     songs: [],
   } as FormSchemaType;
 
@@ -84,7 +85,7 @@ function AddListingForm({
       form.reset({
         category: "song",
         artist: "",
-        songName: "",
+        title: "",
         minutes: 0,
         seconds: 0,
       } as FormSchemaType);
@@ -93,7 +94,8 @@ function AddListingForm({
         category: "album",
         artist: "",
         album: "",
-        songs: [{ songName: "", minutes: 0, seconds: 0 }],
+        description: "",
+        songs: [{ title: "", minutes: 0, seconds: 0 }],
       } as FormSchemaType);
     }
   }, [category]);
@@ -104,23 +106,14 @@ function AddListingForm({
         values.minutes.toString(),
         values.seconds.toString()
       );
-      const res = await createSong(values.songName, length, values.artist);
+      const res = await createSong(values.title, length, values.artist);
       toast(`${res.success?.title}`, {
         description: `${res.success?.description}`,
       });
       setIsOpen(false);
     } else {
-      // Handle album submission
-      const promises = values.songs.map((song) => {
-        const length = formatLength(
-          song.minutes.toString(),
-          song.seconds.toString()
-        );
-        return createSong(song.songName, length, values.artist);
-      });
-      await Promise.all(promises);
-      toast("Album created successfully!");
-      setIsOpen(false);
+      const updatedAlbum = calculateLengthForAlbum(values);
+      const res = await createAlbum({ updatedAlbum });
     }
   };
 
@@ -174,7 +167,7 @@ function AddListingForm({
           <>
             <FormField
               control={form.control}
-              name="songName"
+              name="title"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Song name</FormLabel>
@@ -241,11 +234,28 @@ function AddListingForm({
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Album Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Add a description..."
+                      {...field}
+                      type="text"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             {fields.map((item, index) => (
               <div key={item.id} className="space-y-4">
                 <FormField
                   control={form.control}
-                  name={`songs.${index}.songName`}
+                  name={`songs.${index}.title`}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Song Name</FormLabel>
@@ -307,7 +317,7 @@ function AddListingForm({
             ))}
             <Button
               type="button"
-              onClick={() => append({ songName: "", minutes: 0, seconds: 0 })}
+              onClick={() => append({ title: "", minutes: 0, seconds: 0 })}
             >
               Add Song
             </Button>
