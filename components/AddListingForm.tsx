@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "./ui/button";
 import {
@@ -27,19 +27,28 @@ import { toast } from "sonner";
 
 // Define schemas
 const songSchema = z.object({
-  category: z.literal("song"),
-  artist: z.string().min(1, "Artist name is required."),
   songName: z.string().min(1, "Song name is required."),
-  minutes: z.string().min(1, "Minutes are required."),
-  seconds: z.string().min(1, "Seconds are required."),
+  minutes: z.coerce.number().min(0).max(60, "1 hour per song allowed."),
+  seconds: z.coerce
+    .number()
+    .min(10, "Song can not be less than 10 seconds.")
+    .max(59, "No more than 59 seconds"),
 });
 
 const albumSchema = z.object({
   category: z.literal("album"),
+  artist: z.string().min(1, "Artist name is required."),
   album: z.string().min(1, "Album name is required."),
+  songs: z.array(songSchema).nonempty("At least one song is required."),
 });
 
-const formSchema = z.union([songSchema, albumSchema]);
+const formSchema = z.union([
+  songSchema.extend({
+    category: z.literal("song"),
+    artist: z.string().min(1, "Artist name is required."),
+  }),
+  albumSchema,
+]);
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
@@ -54,8 +63,10 @@ function AddListingForm({
     category: "song",
     artist: "",
     songName: "",
-    minutes: "",
-    seconds: "",
+    minutes: 0,
+    seconds: 0,
+    album: "",
+    songs: [],
   } as FormSchemaType;
 
   const form = useForm<FormSchemaType>({
@@ -63,35 +74,52 @@ function AddListingForm({
     defaultValues,
   });
 
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "songs",
+  });
+
   useEffect(() => {
     if (category === "song") {
       form.reset({
         category: "song",
         artist: "",
-        minutes: "",
-        seconds: "",
         songName: "",
+        minutes: 0,
+        seconds: 0,
       } as FormSchemaType);
     } else {
       form.reset({
         category: "album",
+        artist: "",
         album: "",
+        songs: [{ songName: "", minutes: 0, seconds: 0 }],
       } as FormSchemaType);
     }
   }, [category]);
 
   const onSubmit = async (values: FormSchemaType) => {
     if (values.category === "song") {
-      const length = formatLength(values.minutes, values.seconds);
+      const length = formatLength(
+        values.minutes.toString(),
+        values.seconds.toString()
+      );
       const res = await createSong(values.songName, length, values.artist);
       toast(`${res.success?.title}`, {
         description: `${res.success?.description}`,
       });
       setIsOpen(false);
     } else {
-      toast("Error :(", {
-        description: "An unexpected error has ocurred. Please try again later.",
+      // Handle album submission
+      const promises = values.songs.map((song) => {
+        const length = formatLength(
+          song.minutes.toString(),
+          song.seconds.toString()
+        );
+        return createSong(song.songName, length, values.artist);
       });
+      await Promise.all(promises);
+      toast("Album created successfully!");
       setIsOpen(false);
     }
   };
@@ -104,7 +132,7 @@ function AddListingForm({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Select what would you like to share</FormLabel>
+              <FormLabel>Select what you would like to share</FormLabel>
               <Select
                 onValueChange={(value) => {
                   form.reset();
@@ -128,25 +156,22 @@ function AddListingForm({
           )}
         />
 
+        <FormField
+          control={form.control}
+          name="artist"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Artist name</FormLabel>
+              <FormControl>
+                <Input placeholder="Artist name..." {...field} type="text" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         {category === "song" && (
           <>
-            <FormField
-              control={form.control}
-              name="artist"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Artist name</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Artist name..."
-                      {...field}
-                      type="text"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name="songName"
@@ -166,7 +191,7 @@ function AddListingForm({
                 name="minutes"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Song duration</FormLabel>
+                    <FormLabel>Song duration (minutes)</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input {...field} type="number" />
@@ -184,7 +209,7 @@ function AddListingForm({
                 name="seconds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Song duration</FormLabel>
+                    <FormLabel>Song duration (seconds)</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input {...field} type="number" />
@@ -202,20 +227,91 @@ function AddListingForm({
         )}
 
         {category === "album" && (
-          <FormField
-            control={form.control}
-            name="album"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Album name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Album name..." {...field} type="text" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <>
+            <FormField
+              control={form.control}
+              name="album"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Album name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Album name..." {...field} type="text" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {fields.map((item, index) => (
+              <div key={item.id} className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name={`songs.${index}.songName`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Song Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Song name..."
+                          {...field}
+                          type="text"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex gap-7">
+                  <FormField
+                    control={form.control}
+                    name={`songs.${index}.minutes`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Minutes</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input {...field} type="number" />
+                            <span className="absolute right-8 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
+                              Minutes
+                            </span>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name={`songs.${index}.seconds`}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Seconds</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input {...field} type="number" />
+                            <span className="absolute right-8 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
+                              Seconds
+                            </span>
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <Button type="button" onClick={() => remove(index)}>
+                  Remove Song
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={() => append({ songName: "", minutes: 0, seconds: 0 })}
+            >
+              Add Song
+            </Button>
+          </>
         )}
+
         <div className="flex justify-between">
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
