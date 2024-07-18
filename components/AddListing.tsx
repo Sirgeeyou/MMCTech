@@ -21,7 +21,7 @@ function AddListing() {
       </DialogTrigger>
       <DialogContent aria-describedby={undefined} className="overflow-auto">
         <DialogHeader>
-          <DialogTitle className="text-center pt-4 pb-6 text-2xl">
+          <DialogTitle className="text-center pt-4 text-2xl">
             What would you like to add?
           </DialogTitle>
         </DialogHeader>
