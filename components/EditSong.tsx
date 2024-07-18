@@ -21,17 +21,13 @@ function EditSong({ song }: { song: Song }) {
     <div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger>
-          <span className={buttonVariants({ variant: "secondary" })}>
-            dsadasd
-          </span>
+          <span className={buttonVariants({ variant: "secondary" })}>Edit</span>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent aria-describedby={undefined}>
           <DialogHeader>
-            <DialogTitle>Are you absolutely sure?</DialogTitle>
-            <DialogDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </DialogDescription>
+            <DialogTitle className="text-center pt-4 pb-6 text-2xl">
+              Edit Song
+            </DialogTitle>
           </DialogHeader>
           <EditSongForm setIsOpen={setIsOpen} song={song} />
         </DialogContent>
