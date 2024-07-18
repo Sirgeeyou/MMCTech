@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function getSongs() {
   const supabase = createClient();
@@ -51,7 +52,7 @@ export async function getSongsFromSameAlbum(albumId: number) {
     .eq("id", albumId)
     .single();
 
-  return data;
+  return (data as AlbumData) || {};
 }
 
 export async function createSong(
@@ -61,6 +62,27 @@ export async function createSong(
 ) {
   const supabase = createClient();
 
-  await supabase.from("artists").insert({ name: artistName });
-  await supabase.from("songs").insert({ title, length });
+  try {
+    const { data: newArtist } = await supabase
+      .from("artists")
+      .insert({ name: artistName })
+      .select()
+      .single();
+    console.log("@@@@@@@@", newArtist);
+
+    if (newArtist) {
+      await supabase
+        .from("songs")
+        .insert({ title, length, artist_id: newArtist.id });
+    }
+    revalidatePath("/");
+  } catch (error) {
+    console.log(error);
+  }
+  return {
+    success: {
+      title: "Congratulations!",
+      description: "Your song has been successfully added!",
+    },
+  };
 }

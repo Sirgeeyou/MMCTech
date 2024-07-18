@@ -22,6 +22,7 @@ import {
 import { useEffect, useState } from "react";
 import { formatLength } from "@/utils/helpers/formatLength";
 import { createSong } from "@/lib/actions/songs";
+import { LoadingSpinner } from "./LoadingSpinner";
 
 // Define schemas
 const songSchema = z.object({
@@ -41,7 +42,11 @@ const formSchema = z.union([songSchema, albumSchema]);
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
-function AddListingForm() {
+function AddListingForm({
+  setIsOpen,
+}: {
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   const [category, setCategory] = useState<"song" | "album">("song");
 
   const defaultValues: FormSchemaType = {
@@ -79,6 +84,7 @@ function AddListingForm() {
       const length = formatLength(values.minutes, values.seconds);
       const res = await createSong(values.songName, length, values.artist);
       console.log(res);
+      setIsOpen(false);
     } else {
       console.log(values);
     }
@@ -204,8 +210,22 @@ function AddListingForm() {
             )}
           />
         )}
+        <div className="flex justify-between">
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <LoadingSpinner />
+            ) : (
+              <span>Submit</span>
+            )}
+          </Button>
 
-        <Button type="submit">Submit</Button>
+          <span
+            className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 px-3 hover:cursor-pointer"
+            onClick={() => setIsOpen(false)}
+          >
+            Cancel
+          </span>
+        </div>
       </form>
     </FormProvider>
   );
