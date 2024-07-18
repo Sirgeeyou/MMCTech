@@ -34,7 +34,7 @@ export default function RootLayout({
             <Sidebar className="w-1/5" />
             {children}
           </main>
-          <Toaster />
+          <Toaster position="top-right" />
         </ThemeProvider>
       </body>
     </html>
