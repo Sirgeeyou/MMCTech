@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { data } from "autoprefixer";
+import { revalidatePath } from "next/cache";
 
 export async function getAlbums() {
   const supabase = createClient();
@@ -76,6 +76,7 @@ export async function createAlbum({
       }));
       await supabase.from("songs").upsert(songsToUpsert);
     }
+    revalidatePath("/");
   } catch (error) {
     return {
       error: {
