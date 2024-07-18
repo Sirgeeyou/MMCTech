@@ -107,17 +107,33 @@ function AddListingForm({
         values.seconds.toString()
       );
       const res = await createSong(values.title, length, values.artist);
-      toast(`${res.success?.title}`, {
-        description: `${res.success?.description}`,
-      });
-      setIsOpen(false);
+      if (res.error) {
+        toast.error(`${res.error?.title}`, {
+          description: `${res.error?.description}`,
+        });
+        setIsOpen(false);
+      }
+      if (res.success) {
+        toast.success(`${res.success?.title}`, {
+          description: `${res.success?.description}`,
+        });
+        setIsOpen(false);
+      }
     } else {
       const updatedAlbum = calculateLengthForAlbum(values);
       const res = await createAlbum({ updatedAlbum });
-      toast(`${res.success?.title}`, {
-        description: `${res.success?.description}`,
-      });
-      setIsOpen(false);
+      if (res.error) {
+        toast.error(`${res.error?.title}`, {
+          description: `${res.error?.description}`,
+        });
+        setIsOpen(false);
+      }
+      if (res.success) {
+        toast.success(`${res.success?.title}`, {
+          description: `${res.success?.description}`,
+        });
+        setIsOpen(false);
+      }
     }
   };
 

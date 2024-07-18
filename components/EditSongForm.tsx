@@ -17,6 +17,8 @@ import { toast } from "sonner";
 import { formatLength } from "@/utils/helpers/formatLength";
 import { Tables } from "@/types/types_db";
 import { transformSongLength } from "@/utils/helpers/parseLength";
+import { useParams } from "next/navigation";
+import { updateSong } from "@/lib/actions/songs";
 
 // Define schema
 const formSchema = z.object({
@@ -37,6 +39,7 @@ function EditSongForm({
   song: Song;
 }) {
   const { minutes, seconds } = transformSongLength(song);
+  const params = useParams();
 
   const defaultValues: FormSchemaType = {
     title: song.title,
@@ -49,7 +52,29 @@ function EditSongForm({
     defaultValues,
   });
 
-  const onSubmit = async (values: FormSchemaType) => {};
+  const onSubmit = async (values: FormSchemaType) => {
+    const parsedIntoLength = formatLength(
+      values.minutes.toString(),
+      values.seconds.toString()
+    );
+    const res = await updateSong(
+      values.title,
+      parsedIntoLength,
+      params.id as string
+    );
+    if (res.error) {
+      toast.error(`${res.error?.title}`, {
+        description: `${res.error?.description}`,
+      });
+      setIsOpen(false);
+    }
+    if (res.success) {
+      toast.success(`${res.success?.title}`, {
+        description: `${res.success?.description}`,
+      });
+      setIsOpen(false);
+    }
+  };
 
   return (
     <FormProvider {...form}>

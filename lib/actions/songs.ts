@@ -1,7 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { data } from "autoprefixer";
 import { revalidatePath } from "next/cache";
+import { title } from "process";
 
 export async function getSongs() {
   const supabase = createClient();
@@ -68,7 +70,6 @@ export async function createSong(
       .insert({ name: artistName })
       .select()
       .single();
-    console.log("@@@@@@@@", newArtist);
 
     if (newArtist) {
       await supabase
@@ -88,6 +89,38 @@ export async function createSong(
     success: {
       title: "Congratulations!",
       description: "Your song has been successfully added!",
+    },
+  };
+}
+
+export async function updateSong(
+  title: string,
+  length: string,
+  songId: string
+) {
+  const supabase = createClient();
+
+  try {
+    const { error } = await supabase
+      .from("songs")
+      .update({ title, length })
+      .eq("id", songId);
+    revalidatePath(`/song/${songId}`);
+    console.log(error);
+  } catch (error) {
+    console.log(error);
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while adding the song.",
+      },
+    };
+  }
+
+  return {
+    success: {
+      title: "Congratulations!",
+      description: "Your song has been successfully edited!",
     },
   };
 }
