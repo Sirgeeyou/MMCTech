@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import { formatLength } from "@/utils/helpers/formatLength";
 import { createSong } from "@/lib/actions/songs";
 import { LoadingSpinner } from "./LoadingSpinner";
+import { toast } from "sonner";
 
 // Define schemas
 const songSchema = z.object({
@@ -83,10 +84,15 @@ function AddListingForm({
     if (values.category === "song") {
       const length = formatLength(values.minutes, values.seconds);
       const res = await createSong(values.songName, length, values.artist);
-      console.log(res);
+      toast(`${res.success?.title}`, {
+        description: `${res.success?.description}`,
+      });
       setIsOpen(false);
     } else {
-      console.log(values);
+      toast("Error :(", {
+        description: "An unexpected error has ocurred. Please try again later.",
+      });
+      setIsOpen(false);
     }
   };
 

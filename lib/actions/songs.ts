@@ -77,7 +77,12 @@ export async function createSong(
     }
     revalidatePath("/");
   } catch (error) {
-    console.log(error);
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while adding the song.",
+      },
+    };
   }
   return {
     success: {
