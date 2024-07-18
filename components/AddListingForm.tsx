@@ -114,6 +114,10 @@ function AddListingForm({
     } else {
       const updatedAlbum = calculateLengthForAlbum(values);
       const res = await createAlbum({ updatedAlbum });
+      toast(`${res.success?.title}`, {
+        description: `${res.success?.description}`,
+      });
+      setIsOpen(false);
     }
   };
 
