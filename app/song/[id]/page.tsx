@@ -34,12 +34,10 @@ export default async function page({ ...props }) {
       <div className="flex justify-between">
         <div>
           <h1 className="text-4xl font-bold">{song?.title}</h1>
-          <h3 className="text-xl text-neutral-500">
-            {song?.length.slice(0, -3)}
-          </h3>
+          <h3 className="text-xl text-neutral-500">{song?.length}</h3>
         </div>
         <div className="flex gap-5">
-          <EditSong />
+          <EditSong song={song} />
           <Button variant="destructive">Delete</Button>
         </div>
       </div>
@@ -57,7 +55,7 @@ export default async function page({ ...props }) {
                     className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
                   >
                     <span className="py-1.5">{relatedSong.title}</span>
-                    <span>{relatedSong.length.slice(0, -3)}</span>
+                    <span>{relatedSong.length}</span>
                   </Link>
                 </li>
               ))}

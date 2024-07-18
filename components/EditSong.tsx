@@ -8,11 +8,18 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button, buttonVariants } from "./ui/button";
+import EditSongForm from "./EditSongForm";
+import { useState } from "react";
+import { Tables } from "@/types/types_db";
 
-function EditSong() {
+interface Song extends Tables<"songs"> {}
+
+function EditSong({ song }: { song: Song }) {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div>
-      <Dialog>
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogTrigger>
           <span className={buttonVariants({ variant: "secondary" })}>
             dsadasd
@@ -26,6 +33,7 @@ function EditSong() {
               account and remove your data from our servers.
             </DialogDescription>
           </DialogHeader>
+          {/* <EditSongForm /> */}
         </DialogContent>
       </Dialog>
     </div>

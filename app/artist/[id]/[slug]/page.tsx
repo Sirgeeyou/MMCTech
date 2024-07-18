@@ -40,7 +40,7 @@ export default async function page({ ...props }) {
                       key={song.id}
                     >
                       <li className="py-1.5">{song.title}</li>
-                      <span>{song.length.slice(0, -3)}</span>
+                      <span>{song.length}</span>
                     </Link>
                   ))}
                 </ul>
