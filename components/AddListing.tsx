@@ -8,13 +8,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { CirclePlus } from "lucide-react";
-import { Button } from "./ui/button";
 import AddListingForm from "./AddListingForm";
 
 function AddListing() {
   return (
     <Dialog>
-      <DialogTrigger className="flex gap-2 w-full">
+      <DialogTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 gap-2">
         <CirclePlus />
         <span>Add</span>
       </DialogTrigger>

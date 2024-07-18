@@ -9,7 +9,6 @@ import {
   FormItem,
   FormLabel,
   FormControl,
-  FormDescription,
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
@@ -20,52 +19,85 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Link } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { formatLength } from "@/utils/helpers/formatLength";
+import { createSong } from "@/lib/actions/songs";
 
-const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  email: z
-    .string({
-      required_error: "Please select an email to display.",
-    })
-    .email(),
+// Define schemas
+const songSchema = z.object({
+  category: z.literal("song"),
+  artist: z.string().min(1, "Artist name is required."),
+  songName: z.string().min(1, "Song name is required."),
+  minutes: z.string().min(1, "Minutes are required."),
+  seconds: z.string().min(1, "Seconds are required."),
 });
 
-function AddListingForm() {
-  const [category, setCategory] = useState("song");
+const albumSchema = z.object({
+  category: z.literal("album"),
+  album: z.string().min(1, "Album name is required."),
+});
 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
+const formSchema = z.union([songSchema, albumSchema]);
+
+type FormSchemaType = z.infer<typeof formSchema>;
+
+function AddListingForm() {
+  const [category, setCategory] = useState<"song" | "album">("song");
+
+  const defaultValues: FormSchemaType = {
+    category: "song",
+    artist: "",
+    songName: "",
+    minutes: "",
+    seconds: "",
+  } as FormSchemaType;
+
+  const form = useForm<FormSchemaType>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-      email: "",
-    },
+    defaultValues,
   });
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
+  useEffect(() => {
+    if (category === "song") {
+      form.reset({
+        category: "song",
+        artist: "",
+        minutes: "",
+        seconds: "",
+        songName: "",
+      } as FormSchemaType);
+    } else {
+      form.reset({
+        category: "album",
+        album: "",
+      } as FormSchemaType);
+    }
+  }, [category]);
+
+  const onSubmit = async (values: FormSchemaType) => {
+    if (values.category === "song") {
+      const length = formatLength(values.minutes, values.seconds);
+      const res = await createSong(values.songName, length, values.artist);
+      console.log(res);
+    } else {
+      console.log(values);
+    }
+  };
 
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-6">
         <FormField
           control={form.control}
-          name="email"
+          name="category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Select what would you like to share</FormLabel>
               <Select
                 onValueChange={(value) => {
+                  form.reset();
                   field.onChange(value);
-                  setCategory(value); // Set the category state
+                  setCategory(value as "song" | "album");
                 }}
                 defaultValue={field.value}
               >
@@ -76,34 +108,103 @@ function AddListingForm() {
                 </FormControl>
                 <SelectContent>
                   <SelectItem value="song">Song</SelectItem>
-                  <SelectItem value="m@google.com">Album</SelectItem>
+                  <SelectItem value="album">Album</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>
-                You can manage email addresses in your{" "}
-                <Link href="/examples/forms">email settings</Link>.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        {category === "song" ? <div>song</div> : <div>Album</div>}
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="shadcn" {...field} type="" />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {category === "song" && (
+          <>
+            <FormField
+              control={form.control}
+              name="artist"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Artist name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Artist name..."
+                      {...field}
+                      type="text"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="songName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Song name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Song name..." {...field} type="text" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex gap-7">
+              <FormField
+                control={form.control}
+                name="minutes"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Song duration</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input {...field} type="number" />
+                        <span className="absolute right-8 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
+                          Minutes
+                        </span>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="seconds"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Song duration</FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Input {...field} type="number" />
+                        <span className="absolute right-8 top-1/2 -translate-y-1/2 text-sm text-neutral-500">
+                          Seconds
+                        </span>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </>
+        )}
+
+        {category === "album" && (
+          <FormField
+            control={form.control}
+            name="album"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Album name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Album name..." {...field} type="text" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+
         <Button type="submit">Submit</Button>
       </form>
     </FormProvider>

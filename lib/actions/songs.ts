@@ -51,5 +51,16 @@ export async function getSongsFromSameAlbum(albumId: number) {
     .eq("id", albumId)
     .single();
 
-  return (data as AlbumData) || {};
+  return data;
+}
+
+export async function createSong(
+  title: string,
+  length: string,
+  artistName: string
+) {
+  const supabase = createClient();
+
+  await supabase.from("artists").insert({ name: artistName });
+  await supabase.from("songs").insert({ title, length });
 }
