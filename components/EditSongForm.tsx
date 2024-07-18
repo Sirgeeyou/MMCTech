@@ -12,11 +12,11 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { useEffect } from "react";
-import { createSong } from "@/lib/actions/songs";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { toast } from "sonner";
 import { formatLength } from "@/utils/helpers/formatLength";
+import { Tables } from "@/types/types_db";
+import { transformSongLength } from "@/utils/helpers/parseLength";
 
 // Define schema
 const formSchema = z.object({
@@ -27,21 +27,21 @@ const formSchema = z.object({
 
 type FormSchemaType = z.infer<typeof formSchema>;
 
+interface Song extends Tables<"songs"> {}
+
 function EditSongForm({
   setIsOpen,
-  title,
-  minutes,
-  seconds,
+  song,
 }: {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  title: string;
-  minutes: string;
-  seconds: string;
+  song: Song;
 }) {
+  const { minutes, seconds } = transformSongLength(song);
+
   const defaultValues: FormSchemaType = {
-    title: "",
-    minutes: 0,
-    seconds: 0,
+    title: song.title,
+    minutes: minutes,
+    seconds: seconds,
   };
 
   const form = useForm<FormSchemaType>({
@@ -49,17 +49,7 @@ function EditSongForm({
     defaultValues,
   });
 
-  const onSubmit = async (values: FormSchemaType) => {
-    // const length = formatLength(
-    //   values.minutes.toString(),
-    //   values.seconds.toString()
-    // );
-    // const res = await createSong(values.title, length);
-    // toast(`${res.success?.title}`, {
-    //   description: `${res.success?.description}`,
-    // });
-    // setIsOpen(false);
-  };
+  const onSubmit = async (values: FormSchemaType) => {};
 
   return (
     <FormProvider {...form}>

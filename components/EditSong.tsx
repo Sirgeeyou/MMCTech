@@ -33,7 +33,7 @@ function EditSong({ song }: { song: Song }) {
               account and remove your data from our servers.
             </DialogDescription>
           </DialogHeader>
-          {/* <EditSongForm /> */}
+          <EditSongForm setIsOpen={setIsOpen} song={song} />
         </DialogContent>
       </Dialog>
     </div>
