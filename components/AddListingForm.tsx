@@ -298,9 +298,11 @@ function AddListingForm({
                     )}
                   />
                 </div>
-                <Button type="button" onClick={() => remove(index)}>
-                  Remove Song
-                </Button>
+                {fields.length > 1 && (
+                  <Button type="button" onClick={() => remove(index)}>
+                    Remove Song
+                  </Button>
+                )}
               </div>
             ))}
             <Button
