@@ -1,3 +1,5 @@
+import EditSong from "@/components/EditSong";
+import { Button } from "@/components/ui/button";
 import { getSongById, getSongsFromSameAlbum } from "@/lib/actions/songs";
 import { Tables } from "@/types/types_db";
 import Link from "next/link";
@@ -29,8 +31,18 @@ export default async function page({ ...props }) {
 
   return (
     <main className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
-      <h1 className="text-4xl font-bold">{song?.title}</h1>
-      <h3 className="text-xl text-neutral-500">{song?.length.slice(0, -3)}</h3>
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-4xl font-bold">{song?.title}</h1>
+          <h3 className="text-xl text-neutral-500">
+            {song?.length.slice(0, -3)}
+          </h3>
+        </div>
+        <div className="flex gap-5">
+          <EditSong />
+          <Button variant="destructive">Delete</Button>
+        </div>
+      </div>
 
       {songsFromSameAlbum && (
         <div>
