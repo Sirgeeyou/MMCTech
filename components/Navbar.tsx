@@ -16,7 +16,6 @@ async function Navbar() {
         <GlobalSearch />
         <div className="flex gap-3 p-3 text-sm items-center">
           <AuthButton />
-          <ToggleTheme />
         </div>
       </div>
     </nav>
