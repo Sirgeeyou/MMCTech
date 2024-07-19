@@ -41,16 +41,18 @@ const GlobalSearch = () => {
   }, [pathname]);
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      const newUrl = formUrlQuery({
-        params: searchParams.toString(),
-        key: "search",
-        value: search,
-      });
-      router.push(newUrl, { scroll: false });
-    }, 300);
+    if (search.trim() !== "") {
+      const delayDebounceFn = setTimeout(() => {
+        const newUrl = formUrlQuery({
+          params: searchParams.toString(),
+          key: "search",
+          value: search,
+        });
+        router.push(newUrl, { scroll: false });
+      }, 300);
 
-    return () => clearTimeout(delayDebounceFn);
+      return () => clearTimeout(delayDebounceFn);
+    }
   }, [search, pathname, router, searchParams]);
 
   return (

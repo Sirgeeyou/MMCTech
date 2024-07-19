@@ -13,7 +13,7 @@ function LatestArtists({ artists }: { artists: Artist[] }) {
       <ScrollArea className="flex h-[500px] w-full rounded-md border hover:border-primary/25">
         <div className="flex flex-wrap gap-12 mx-4 py-5">
           {artists?.map((artist) => (
-            <Link key={artist.id} href={`/artist/${artist.id}/${artist.name}`}>
+            <Link key={artist.id} href={`/artist/${artist.id}`}>
               <div className="flex flex-col hover:bg-accent rounded-md">
                 <Avatar className="md:h-56 md:w-56 h-32 w-32 px-3">
                   <AvatarImage
