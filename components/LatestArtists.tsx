@@ -9,7 +9,7 @@ interface Artist extends Tables<"artists"> {}
 function LatestArtists({ artists }: { artists: Artist[] }) {
   return (
     <section className="px-5">
-      <h1 className="my-10 ml-5 text-3xl">Popular Artists</h1>
+      <h1 className="my-10 text-3xl">Popular Artists</h1>
       <ScrollArea className="flex h-[500px] w-full rounded-md border hover:border-primary/25">
         <div className="flex flex-wrap gap-12 mx-4 py-5">
           {artists?.map((artist) => (

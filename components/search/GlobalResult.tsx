@@ -25,7 +25,7 @@ const GlobalResult = () => {
     songs: [],
   });
 
-  const global = searchParams.get("global");
+  const search = searchParams.get("search");
 
   useEffect(() => {
     const fetchResult = async () => {
@@ -35,7 +35,7 @@ const GlobalResult = () => {
       try {
         // Everything | Everywhwere | All at once
         // Global Search
-        const res = await globalSearch({ query: global });
+        const res = await globalSearch({ query: search });
         setResult(res);
       } catch (error) {
         console.error(error);
@@ -45,10 +45,10 @@ const GlobalResult = () => {
       }
     };
 
-    if (global) {
+    if (search) {
       fetchResult();
     }
-  }, [global]);
+  }, [search]);
 
   const renderResults = (title: string, items: any[], urlPath: string) =>
     items.length > 0 && (

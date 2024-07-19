@@ -12,7 +12,9 @@ async function Sidebar({ className }: { className: string }) {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <div className={cn(className, "border-r border-r-foreground/10")}>
+    <div
+      className={cn(className, "border-r border-r-foreground/10 min-h-screen")}
+    >
       <div className="flex flex-col gap-4 p-4">
         <div className="flex gap-2">
           <Home />

@@ -37,13 +37,6 @@ const GlobalSearch = () => {
 
     document.addEventListener("click", handleOutsideClick);
 
-    const newUrl = removeKeysFromQuery({
-      params: searchParams.toString(),
-      keysToRemove: ["global", "type"],
-    });
-
-    router.push(newUrl, { scroll: false });
-
     return () => {
       document.removeEventListener("click", handleOutsideClick);
     };
@@ -54,7 +47,7 @@ const GlobalSearch = () => {
     const delayDebounceFn = setTimeout(() => {
       const newUrl = formUrlQuery({
         params: searchParams.toString(),
-        key: "global",
+        key: "search",
         value: search,
       });
       router.push(newUrl, { scroll: false });
