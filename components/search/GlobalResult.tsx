@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { useSearchParams } from "next/navigation";
 import { globalSearch } from "@/lib/actions/general";
@@ -77,29 +77,31 @@ const GlobalResult = () => {
     !result.artists.length && !result.albums.length && !result.songs.length;
 
   return (
-    <Card className="absolute top-full z-10 mt-3 w-full max-w-[600px]">
-      <CardContent>
-        <ScrollArea className="h-80">
-          {isLoading ? (
-            <div className="flex justify-center items-center h-full">
-              <LoaderCircle className="w-10 h-10 animate-spin" />
-            </div>
-          ) : (
-            <div className="flex flex-col gap-2">
-              {noResults ? (
-                <p>Oops, no results found</p>
-              ) : (
-                <>
-                  {renderResults("Artists", result.artists, "artist")}
-                  {renderResults("Albums", result.albums, "album")}
-                  {renderResults("Songs", result.songs, "song")}
-                </>
-              )}
-            </div>
-          )}
-        </ScrollArea>
-      </CardContent>
-    </Card>
+    <Suspense>
+      <Card className="absolute top-full z-10 mt-3 w-full max-w-[600px]">
+        <CardContent>
+          <ScrollArea className="h-80">
+            {isLoading ? (
+              <div className="flex justify-center items-center h-full">
+                <LoaderCircle className="w-10 h-10 animate-spin" />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {noResults ? (
+                  <p>Oops, no results found</p>
+                ) : (
+                  <>
+                    {renderResults("Artists", result.artists, "artist")}
+                    {renderResults("Albums", result.albums, "album")}
+                    {renderResults("Songs", result.songs, "song")}
+                  </>
+                )}
+              </div>
+            )}
+          </ScrollArea>
+        </CardContent>
+      </Card>
+    </Suspense>
   );
 };
 

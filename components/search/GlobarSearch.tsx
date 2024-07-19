@@ -4,10 +4,7 @@ import GlobalResult from "./GlobalResult";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import {
-  formUrlQuery,
-  removeKeysFromQuery,
-} from "@/utils/helpers/formUrlQuery";
+import { formUrlQuery } from "@/utils/helpers/formUrlQuery";
 
 const GlobalSearch = () => {
   const router = useRouter();
