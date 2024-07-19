@@ -1,6 +1,7 @@
 import DeleteButton from "@/components/DeleteButton";
 import EditAlbum from "@/components/EditAlbum";
 import { deleteAlbumById, getAlbumDetails } from "@/lib/actions/albums";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 interface PageProps {
@@ -9,6 +10,8 @@ interface PageProps {
 
 export default async function AlbumPage({ params }: PageProps) {
   const data = await getAlbumDetails(params.id);
+  const supabase = createClient();
+  const user = await supabase.auth.getSession();
 
   if (data === null) {
     return <p>Album not found</p>;
@@ -27,14 +30,16 @@ export default async function AlbumPage({ params }: PageProps) {
                 </span>
               </p>
             </h3>
-            <div className="flex gap-5">
-              <EditAlbum album={data} />
-              <DeleteButton
-                id={params.id}
-                deleteFunction={deleteAlbumById}
-                description="This action cannot be undone. This will permanently delete the album and its songs."
-              />
-            </div>
+            {user.data.session && (
+              <div className="flex gap-5">
+                <EditAlbum album={data} />
+                <DeleteButton
+                  id={params.id}
+                  deleteFunction={deleteAlbumById}
+                  description="This action cannot be undone. This will permanently delete the album and its songs."
+                />
+              </div>
+            )}
           </div>
           <h4 className="text-md">{data.description}</h4>
           <div className="pt-4">

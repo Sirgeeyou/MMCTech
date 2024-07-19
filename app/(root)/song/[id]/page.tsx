@@ -6,6 +6,7 @@ import {
   getSongsFromSameAlbum,
 } from "@/lib/actions/songs";
 import { Tables } from "@/types/types_db";
+import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 
 interface Song {
@@ -25,6 +26,8 @@ interface PageProps {
 
 export default async function SongPage({ params }: PageProps) {
   const song = await getSongById(params.id);
+  const supabase = createClient();
+  const user = await supabase.auth.getSession();
   if (!song) {
     return <div>Song not found.</div>;
   }
@@ -42,14 +45,16 @@ export default async function SongPage({ params }: PageProps) {
           <h1 className="text-4xl font-bold">{song?.title}</h1>
           <h3 className="text-xl text-neutral-500">{song?.length}</h3>
         </div>
-        <div className="flex gap-5">
-          <EditSong song={song} />
-          <DeleteButton
-            id={params.id}
-            deleteFunction={deleteSongById}
-            description="This action cannot be undone. This will permanently delete the song."
-          />
-        </div>
+        {user.data.session && (
+          <div className="flex gap-5">
+            <EditSong song={song} />
+            <DeleteButton
+              id={params.id}
+              deleteFunction={deleteSongById}
+              description="This action cannot be undone. This will permanently delete the song."
+            />
+          </div>
+        )}
       </div>
 
       {songsFromSameAlbum && (
