@@ -26,7 +26,6 @@ export default async function page({ ...props }) {
 
   if (song.album_id) {
     songsFromSameAlbum = await getSongsFromSameAlbum(song.album_id);
-    console.log(songsFromSameAlbum);
   }
 
   return (

@@ -1,18 +1,54 @@
+import EditAlbum from "@/components/EditAlbum";
+import { Button } from "@/components/ui/button";
 import { getAlbumDetails } from "@/lib/actions/albums";
 import Link from "next/link";
 
+// Define the type for an artist
+interface Artist {
+  id?: number; // Optional if not provided in your data
+  name: string;
+}
+
+// Define the type for a song
+interface Song {
+  id: number;
+  title: string;
+  length: string; // Length as a string (e.g., "05:24")
+}
+
+// Define the type for an album
+interface Album {
+  title: string;
+  description: string;
+  songs: Song[];
+  artists: Artist | null; // Nullable if there can be cases where the artist info might be missing
+}
+
 export default async function page({ ...props }) {
-  const data = await getAlbumDetails(props.params.id);
+  const data: Album | null = await getAlbumDetails(props.params.id);
+
+  if (data === null) {
+    return <p>Album not found</p>; // Handle the case where the album is not found
+  }
   return (
     <main className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
       {data && (
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl">{data?.title}</h1>
-          <h3>
-            <p className="text-neutral-500">
-              Album by <span className="text-white"></span>
-            </p>
-          </h3>
+          <div className="flex justify-between">
+            <h3>
+              <p className="text-neutral-500">
+                Album by{" "}
+                <span className="text-black dark:text-white">
+                  {data.artists?.name}
+                </span>
+              </p>
+            </h3>
+            <div className="flex gap-5">
+              <EditAlbum album={data} />
+              <Button variant="destructive">Delete</Button>
+            </div>
+          </div>
           <h4 className="text-md">{data.description}</h4>
           <div className="pt-4">
             <h4 className="text-neutral-500 pb-2">
