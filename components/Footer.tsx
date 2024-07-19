@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { ToggleTheme } from "./ToggleTheme";
 import { createClient } from "@/utils/supabase/server";
+import Image from "next/image";
 
 async function Footer() {
-  const supabase = createClient();
-
   return (
     <footer className="w-full flex justify-center border-t border-t-foreground/10">
-      <div className="max-w-screen-lg flex w-full justify-between items-center  h-16 px-4">
-        <Link href={"/"}>Logo</Link>
+      <div className="flex w-full justify-between items-center  h-20 px-4 sm:px-8">
+        <Link href={"/"}>
+          <Image height={64} width={64} src={"/logo.png"} alt="Logo" />
+        </Link>
 
         <ToggleTheme />
       </div>

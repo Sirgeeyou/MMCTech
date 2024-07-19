@@ -10,14 +10,16 @@ import {
 import { CirclePlus } from "lucide-react";
 import AddListingForm from "./AddListingForm";
 import { useState } from "react";
+import { buttonVariants } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 function AddListing() {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 p-2 gap-2">
-        <CirclePlus />
-        <span>Add</span>
+      <DialogTrigger className={cn(buttonVariants({ variant: "default" }))}>
+        <CirclePlus className="mr-2" />
+        <span>Add Media</span>
       </DialogTrigger>
       <DialogContent aria-describedby={undefined} className="overflow-auto">
         <DialogHeader>

@@ -4,6 +4,7 @@ import { Separator } from "./ui/separator";
 import { Home, Library } from "lucide-react";
 import AddListing from "./AddListing";
 import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
 
 async function Sidebar() {
   const supabase = createClient();
@@ -12,11 +13,11 @@ async function Sidebar() {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <div className="border-r border-r-foreground/10 min-h-screen w-1/5 max-w-[280px] hidden md:block">
+    <div className="border-r border-r-foreground/10 min-h-screen w-1/5 hidden md:block">
       <div className="flex flex-col gap-4 p-4">
         <div className="flex gap-2">
           <Home />
-          <span>Home</span>
+          <Link href={"/"}>Home</Link>
         </div>
         <span>Search placeholder</span>
         <Separator />
