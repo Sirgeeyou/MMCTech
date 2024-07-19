@@ -124,3 +124,31 @@ export async function updateSong(
     },
   };
 }
+
+interface DeleteSongById {
+  id: number;
+}
+
+export async function deleteSong(params: DeleteSongById) {
+  const supabase = createClient();
+
+  const { id } = params;
+
+  try {
+    const { error } = await supabase.from("songs").delete().eq("id", id);
+    revalidatePath("/");
+  } catch (error) {
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while removing the song.",
+      },
+    };
+  }
+  return {
+    success: {
+      title: "Song deleted!",
+      description: "The song has been successfuly deleted!",
+    },
+  };
+}
