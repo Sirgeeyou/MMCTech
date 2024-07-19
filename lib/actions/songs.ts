@@ -147,8 +147,8 @@ export async function deleteSongById(params: DeleteSongById) {
   }
   return {
     success: {
-      title: "Album deleted!",
-      description: "The album has been successfuly deleted!",
+      title: "Song deleted!",
+      description: "The song has been successfuly deleted!",
     },
   };
 }
