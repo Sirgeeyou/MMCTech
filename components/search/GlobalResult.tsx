@@ -7,6 +7,7 @@ import { globalSearch } from "@/lib/actions/general";
 import { LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { Tables } from "@/types/types_db";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface QueryResult {
   artists: Tables<"artists">[];
@@ -52,14 +53,21 @@ const GlobalResult = () => {
   const renderResults = (title: string, items: any[], urlPath: string) =>
     items.length > 0 && (
       <div className="flex flex-col">
-        <h1 className="font-bold">{title}</h1>
+        <h1 className="font-bold mt-2">{title}</h1>
         {items.map((item) => (
           <Link key={item.id} href={`/${urlPath}/${item.id}`}>
-            {item.title
-              ? `${item.title} by ${
-                  item.artists ? item.artists.name : "Unknown Artist"
-                }`
-              : item.name}
+            {item.title ? (
+              <>
+                <span>{item.title}</span>{" "}
+                <span className="text-neutral-500">
+                  {item.artists
+                    ? `by ${item.artists.name}`
+                    : "by Unknown Artist"}
+                </span>
+              </>
+            ) : (
+              item.name
+            )}
           </Link>
         ))}
       </div>
@@ -70,25 +78,26 @@ const GlobalResult = () => {
 
   return (
     <Card className="absolute top-full z-10 mt-3 w-full max-w-[600px]">
-      <CardHeader>
-        <CardTitle className="gap-2 flex border-b border-secondary"></CardTitle>
-      </CardHeader>
       <CardContent>
-        {isLoading ? (
-          <LoaderCircle className="size-10 animate-spin" />
-        ) : (
-          <div className="flex flex-col gap-2">
-            {noResults ? (
-              <p>Oops, no results found</p>
-            ) : (
-              <>
-                {renderResults("Artists", result.artists, "artist")}
-                {renderResults("Albums", result.albums, "album")}
-                {renderResults("Songs", result.songs, "song")}
-              </>
-            )}
-          </div>
-        )}
+        <ScrollArea className="h-80">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-full">
+              <LoaderCircle className="w-10 h-10 animate-spin" />
+            </div>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {noResults ? (
+                <p>Oops, no results found</p>
+              ) : (
+                <>
+                  {renderResults("Artists", result.artists, "artist")}
+                  {renderResults("Albums", result.albums, "album")}
+                  {renderResults("Songs", result.songs, "song")}
+                </>
+              )}
+            </div>
+          )}
+        </ScrollArea>
       </CardContent>
     </Card>
   );

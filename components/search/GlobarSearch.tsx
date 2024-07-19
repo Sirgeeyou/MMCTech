@@ -65,8 +65,8 @@ const GlobalSearch = () => {
 
   return (
     <div className="relative w-full max-w-[600px]" ref={searchContainerRef}>
-      <div className="flex grow items-center h-11">
-        <Search className="size-6" />
+      <div className="flex grow items-center h-11 relative">
+        <Search className="size-6 absolute top-2 right-2" />
         <Input
           type="text"
           placeholder="Search globally"
