@@ -164,14 +164,14 @@ function EditAlbumForm({
           </Button>
         </div>
         <div className="flex justify-between">
-          <span
+          <button
             className={`hover:cursor-pointer ${buttonVariants({
               variant: "secondary",
             })}`}
             onClick={() => setIsOpen(false)}
           >
             Cancel
-          </span>
+          </button>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <LoadingSpinner />
