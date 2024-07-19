@@ -2,6 +2,7 @@ import Link from "next/link";
 import AuthButton from "./AuthButton";
 import GlobalSearch from "./search/GlobarSearch";
 import Image from "next/image";
+import { Suspense } from "react";
 
 async function Navbar() {
   return (
@@ -10,7 +11,9 @@ async function Navbar() {
         <Link href={"/"}>
           <Image height={64} width={64} src={"/logo.png"} alt="Logo" />
         </Link>
-        <GlobalSearch />
+        <Suspense fallback={<div>Loading...</div>}>
+          <GlobalSearch />
+        </Suspense>
         <div className="flex gap-3  text-sm items-center">
           <AuthButton />
         </div>

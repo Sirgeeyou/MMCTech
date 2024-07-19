@@ -1,5 +1,5 @@
 import React from "react";
-// import { Separator } from "./ui/separator";
+import { Separator } from "./ui/separator";
 import { Home, Library } from "lucide-react";
 import AddListing from "./AddListing";
 import { createClient } from "@/utils/supabase/server";
@@ -18,7 +18,7 @@ async function Sidebar() {
           <Home />
           <Link href={"/"}>Home</Link>
         </div>
-        {/* <Separator /> */}
+        <Separator />
         <div className="flex flex-col gap-3">
           <div className="flex gap-2">
             <Library />
