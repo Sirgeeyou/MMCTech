@@ -20,8 +20,8 @@ function EditSong({ song }: { song: Song }) {
   return (
     <div>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger>
-          <span className={buttonVariants({ variant: "secondary" })}>Edit</span>
+        <DialogTrigger className={buttonVariants({ variant: "secondary" })}>
+          Edit
         </DialogTrigger>
         <DialogContent aria-describedby={undefined}>
           <DialogHeader>

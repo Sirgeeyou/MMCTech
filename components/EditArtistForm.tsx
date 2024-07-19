@@ -15,9 +15,10 @@ import { Input } from "./ui/input";
 import { LoadingSpinner } from "./LoadingSpinner";
 import { toast } from "sonner";
 import { useParams } from "next/navigation";
+import { updateArtist } from "@/lib/actions/artists";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Artist name is required."),
+  artistName: z.string().min(1, "Artist name is required."),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -28,10 +29,11 @@ function EditArtistForm({
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const params = useParams();
+  const revalidationPath = `/artist/${params.id}/${params.slug}`;
   console.log(params);
 
   const defaultValues: FormSchemaType = {
-    name: params.slug as string,
+    artistName: params.slug as string,
   };
 
   const form = useForm<FormSchemaType>({
@@ -39,14 +41,32 @@ function EditArtistForm({
     defaultValues,
   });
 
-  const onSubmit = async (values: FormSchemaType) => {};
+  const onSubmit = async (values: FormSchemaType) => {
+    const res = await updateArtist(
+      Number(params.id),
+      values.artistName,
+      revalidationPath
+    );
+    if (res.error) {
+      toast.error(`${res.error?.title}`, {
+        description: `${res.error?.description}`,
+      });
+      setIsOpen(false);
+    }
+    if (res.success) {
+      toast.success(`${res.success?.title}`, {
+        description: `${res.success?.description}`,
+      });
+      setIsOpen(false);
+    }
+  };
 
   return (
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-6">
         <FormField
           control={form.control}
-          name="name"
+          name="artistName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Artist Name</FormLabel>

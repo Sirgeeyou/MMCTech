@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "./LoadingSpinner";
@@ -54,8 +54,10 @@ function DeleteButton({ id, deleteFunction, description }: DeleteButtonProps) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
-        <Button variant="destructive">Delete</Button>
+      <AlertDialogTrigger
+        className={buttonVariants({ variant: "destructive" })}
+      >
+        Delete
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

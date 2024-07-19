@@ -36,7 +36,7 @@ export default async function page({ ...props }) {
             />
           </div>
         </div>
-        {data?.map((album) => (
+        {data?.albums.map((album) => (
           <Accordion
             type="single"
             collapsible
@@ -65,6 +65,31 @@ export default async function page({ ...props }) {
             </AccordionItem>
           </Accordion>
         ))}
+        {data.standaloneSongs &&
+          data?.standaloneSongs.map((song) => (
+            <Accordion
+              type="single"
+              collapsible
+              key={song.title}
+              className="p-6"
+            >
+              <AccordionItem value="item-1">
+                <AccordionTrigger className="text-xl">Singles</AccordionTrigger>
+                <AccordionContent>
+                  <ul className="mt-5">
+                    <Link
+                      href={`/song/${song.id}`}
+                      className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
+                      key={song.id}
+                    >
+                      <li className="py-1.5">{song.title}</li>
+                      <span>{song.length}</span>
+                    </Link>
+                  </ul>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))}
       </div>
     </main>
   );

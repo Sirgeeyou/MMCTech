@@ -12,17 +12,64 @@ export async function getArtists() {
 
 export async function getArtistRelatedMusic(artistId: number) {
   const supabase = createClient();
-  const { data, error } = await supabase
+
+  // Fetch albums and their songs for the given artist
+  const { data: albumsData, error: albumsError } = await supabase
     .from("albums")
-    .select(`title, description, songs (id, title, length), artists(name)`)
+    .select(`id, title, description, songs (id, title, length)`)
     .eq("artist_id", artistId);
 
-  if (error) {
-    console.error("Error fetching album details:", error);
-    return null; // or handle the error as needed
+  if (albumsError) {
+    console.error("Error fetching albums details:", albumsError);
+    return null;
   }
 
-  return data || [];
+  const { data: songsData, error: songsError } = await supabase
+    .from("songs")
+    .select(`id, title, length`)
+    .is("album_id", null)
+    .eq("artist_id", artistId);
+
+  if (songsError) {
+    console.error("Error fetching standalone songs:", songsError);
+    return null;
+  }
+
+  // Combine both results
+  const combinedData = {
+    albums: albumsData || [],
+    standaloneSongs: songsData || [],
+  };
+
+  return combinedData;
+}
+
+export async function updateArtist(
+  artistId: number,
+  artistName: string,
+  path: string
+) {
+  const supabase = createClient();
+  try {
+    await supabase
+      .from("artists")
+      .update({ name: artistName })
+      .eq("id", artistId);
+    revalidatePath(`${path}`);
+  } catch (error) {
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while editing the artist.",
+      },
+    };
+  }
+  return {
+    success: {
+      title: "Artist edited!",
+      description: "The artist has been successfuly edited!",
+    },
+  };
 }
 
 interface DeleteArtistById {
