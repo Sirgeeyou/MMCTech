@@ -13,7 +13,6 @@ import DeleteButton from "@/components/DeleteButton";
 export default async function page({ ...props }) {
   const artistName = props.params.slug;
   const data = await getArtistRelatedMusic(props.params.id)!;
-  console.log(data);
   if (data === null) {
     return <p>Album not found</p>;
   }

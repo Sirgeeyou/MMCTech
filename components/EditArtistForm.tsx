@@ -30,7 +30,6 @@ function EditArtistForm({
 }) {
   const params = useParams();
   const revalidationPath = `/artist/${params.id}/${params.slug}`;
-  console.log(params);
 
   const defaultValues: FormSchemaType = {
     artistName: params.slug as string,

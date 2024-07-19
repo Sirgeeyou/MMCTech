@@ -106,7 +106,6 @@ export async function updateSong(
       .update({ title, length })
       .eq("id", songId);
     revalidatePath(`/song/${songId}`);
-    console.log(error);
   } catch (error) {
     console.log(error);
     return {
