@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import console from "console";
 import { revalidatePath } from "next/cache";
 
 export async function getArtists() {
@@ -40,7 +41,7 @@ export async function getArtistRelatedMusic(artistId: number) {
     standaloneSongs: songsData || [],
   };
 
-  return combinedData;
+  return combinedData || [];
 }
 
 export async function updateArtist(
@@ -97,4 +98,22 @@ export async function deleteArtistById(params: DeleteArtistById) {
       description: "The artist has been successfuly deleted!",
     },
   };
+}
+
+interface GetArtistById {
+  id: number;
+}
+
+export async function getArtistById(params: GetArtistById) {
+  const supabase = createClient();
+
+  const { id } = params;
+
+  const artist = await supabase
+    .from("artists")
+    .select("name")
+    .eq("id", id)
+    .single();
+
+  return artist;
 }

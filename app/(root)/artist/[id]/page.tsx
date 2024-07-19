@@ -1,4 +1,8 @@
-import { deleteArtistById, getArtistRelatedMusic } from "@/lib/actions/artists";
+import {
+  deleteArtistById,
+  getArtistById,
+  getArtistRelatedMusic,
+} from "@/lib/actions/artists";
 import {
   Accordion,
   AccordionContent,
@@ -15,23 +19,44 @@ interface PageProps {
 }
 
 export default async function ArtistPage({ params }: PageProps) {
-  const data = await getArtistRelatedMusic(params.id)!;
+  // Fetch related music and artist information
+  const [relatedMusic, artistResult] = await Promise.all([
+    getArtistRelatedMusic(params.id),
+    getArtistById({ id: params.id }),
+  ]);
+
   const supabase = createClient();
-  const user = await supabase.auth.getSession();
-  if (data === null) {
-    return <p>Album not found</p>;
+  const { data: sessionData } = await supabase.auth.getSession();
+  const user = sessionData?.session;
+
+  if (!artistResult || !artistResult.data) {
+    return <p className="text-lg mt-5 pl-5 mx-auto">Artist not found.</p>;
   }
+
+  const artistName = artistResult.data.name;
+
+  if (
+    !relatedMusic ||
+    (!relatedMusic.albums.length && !relatedMusic.standaloneSongs.length)
+  ) {
+    return (
+      <p className="text-lg mt-5 mx-auto">
+        This artist has no music posted yet.
+      </p>
+    );
+  }
+
   return (
     <div className="md:w-4/5 w-full overflow-hidden flex flex-col rounded-md">
       <div className="w-full bg-gradient-to-r from-slate-500 to-transparent pl-6 py-10">
-        <h1 className="font-bold text-4xl">{data.albums[0].artists?.name}</h1>
+        <h1 className="font-bold text-4xl">{artistName}</h1>
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center pr-6 mt-6">
           <h2 className="text-neutral-500 pl-6">
-            Albums available by {data.albums[0].artists?.name}
+            Albums available by {artistName}
           </h2>
-          {user.data.session && (
+          {user && (
             <div className="flex gap-5 items-center">
               <EditArtist />
               <DeleteButton
@@ -42,14 +67,9 @@ export default async function ArtistPage({ params }: PageProps) {
             </div>
           )}
         </div>
-        {data?.albums.map((album) => (
-          <Accordion
-            type="single"
-            collapsible
-            key={album.title}
-            className="p-6"
-          >
-            <AccordionItem value="item-1">
+        {relatedMusic.albums.map((album) => (
+          <Accordion type="single" collapsible key={album.id} className="p-6">
+            <AccordionItem value={`album-${album.id}`}>
               <AccordionTrigger className="text-xl">
                 {album.title}
               </AccordionTrigger>
@@ -69,29 +89,30 @@ export default async function ArtistPage({ params }: PageProps) {
             </AccordionItem>
           </Accordion>
         ))}
-        {data.standaloneSongs &&
-          data?.standaloneSongs.map((song) => (
-            <Accordion
-              type="single"
-              collapsible
-              key={song.title}
-              className="p-6"
-            >
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="text-xl">Singles</AccordionTrigger>
-                <AccordionContent>
+        {relatedMusic.standaloneSongs.length > 0 && (
+          <Accordion
+            type="single"
+            collapsible
+            key="standalone-songs"
+            className="p-6"
+          >
+            <AccordionItem value="standalone-songs">
+              <AccordionTrigger className="text-xl">Singles</AccordionTrigger>
+              <AccordionContent>
+                {relatedMusic.standaloneSongs.map((song) => (
                   <Link
+                    key={song.id}
                     href={`/song/${song.id}`}
                     className="flex justify-between hover:bg-accent items-center rounded-md my-2 p-2"
-                    key={song.id}
                   >
                     <span>{song.title}</span>
                     <span>{song.length}</span>
                   </Link>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          ))}
+                ))}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        )}
       </div>
     </div>
   );

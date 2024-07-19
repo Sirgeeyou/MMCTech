@@ -106,23 +106,48 @@ export async function updateAlbum(albumId: string, album: Album) {
   console.log(album);
   const { title, description, artists: artist, songs } = album;
   try {
+    // Update artist
     await supabase
       .from("artists")
       .update({ name: artist.name })
       .eq("id", artist.id);
 
+    // Update album
     await supabase
       .from("albums")
       .update({ title, description })
       .eq("id", albumId);
 
-    const songsToUpsert = songs.map((song) => ({
-      album_id: parseInt(albumId),
-      title: song.title,
-      length: song.length,
-      artist_id: artist.id,
-    }));
-    await supabase.from("songs").upsert(songsToUpsert);
+    // Get existing songs for the album
+    const { data: existingSongs, error: existingSongsError } = await supabase
+      .from("songs")
+      .select("id, title")
+      .eq("album_id", parseInt(albumId));
+
+    if (existingSongsError) {
+      throw existingSongsError;
+    }
+
+    // Create a map of existing song titles
+    const existingSongTitles = new Set(
+      existingSongs.map((song) => song.title.toLowerCase())
+    );
+
+    // Filter out songs that already exist
+    const songsToUpsert = songs
+      .filter((song) => !existingSongTitles.has(song.title.toLowerCase()))
+      .map((song) => ({
+        album_id: parseInt(albumId),
+        title: song.title,
+        length: song.length,
+        artist_id: artist.id,
+      }));
+
+    // Upsert new songs
+    if (songsToUpsert.length > 0) {
+      await supabase.from("songs").upsert(songsToUpsert);
+    }
+    revalidatePath(`/album/${albumId}`);
   } catch (error) {
     return {
       error: {
