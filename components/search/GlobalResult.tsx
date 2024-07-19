@@ -77,7 +77,7 @@ const GlobalResult = () => {
     !result.artists.length && !result.albums.length && !result.songs.length;
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoaderCircle className="w-10 h-10 animate-spin" />}>
       <Card className="absolute top-full z-10 mt-3 w-full max-w-[600px]">
         <CardContent>
           <ScrollArea className="h-80">
