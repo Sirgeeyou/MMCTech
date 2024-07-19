@@ -13,7 +13,7 @@ export async function getArtistRelatedMusic(artistId: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("albums")
-    .select(`title, description, songs (id, title, length)`)
+    .select(`title, description, songs (id, title, length), artists(name)`)
     .eq("artist_id", artistId);
 
   if (error) {

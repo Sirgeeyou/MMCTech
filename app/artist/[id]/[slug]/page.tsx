@@ -6,19 +6,28 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
+import console from "console";
+import EditArtist from "@/components/EditArtist";
 
 export default async function page({ ...props }) {
   const artistName = props.params.slug;
   const data = await getArtistRelatedMusic(props.params.id)!;
+  console.log(data);
+  if (data === null) {
+    return <p>Album not found</p>;
+  }
   return (
     <main className="w-4/5 overflow-hidden flex flex-col rounded-md">
       <div className="w-full bg-gradient-to-r from-slate-500 to-transparent pl-6 py-10">
         <h1 className="font-bold text-4xl">{artistName}</h1>
       </div>
       <div className="flex flex-col gap-4">
-        <h2 className="mt-8 text-neutral-500 pl-6">
-          Albums available by {artistName}
-        </h2>
+        <div className="flex justify-between">
+          <h2 className="mt-8 text-neutral-500 pl-6">
+            Albums available by {artistName}
+          </h2>
+          <EditArtist />
+        </div>
         {data?.map((album) => (
           <Accordion
             type="single"

@@ -7,7 +7,7 @@ export default async function page({ ...props }) {
   const data = await getAlbumDetails(props.params.id);
 
   if (data === null) {
-    return <p>Album not found</p>; // Handle the case where the album is not found
+    return <p>Album not found</p>; 
   }
   return (
     <main className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
