@@ -33,8 +33,8 @@ export default async function page({ ...props }) {
   }
 
   return (
-    <main className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
-      <div className="flex justify-between">
+    <div className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
+      <div className="flex justify-between items-center">
         <div>
           <h1 className="text-4xl font-bold">{song?.title}</h1>
           <h3 className="text-xl text-neutral-500">{song?.length}</h3>
@@ -52,23 +52,21 @@ export default async function page({ ...props }) {
       {songsFromSameAlbum && (
         <div>
           <h3 className="text-xl mt-6">Songs from the same album</h3>
-          <ul>
-            {songsFromSameAlbum.songs
-              .filter((s) => s.id !== song.id)
-              .map((relatedSong) => (
-                <li key={relatedSong.id}>
-                  <Link
-                    href={`/song/${relatedSong.id}`}
-                    className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
-                  >
-                    <span className="py-1.5">{relatedSong.title}</span>
-                    <span>{relatedSong.length}</span>
-                  </Link>
-                </li>
-              ))}
-          </ul>
+          {songsFromSameAlbum.songs
+            .filter((s) => s.id !== song.id)
+            .map((relatedSong) => (
+              <li key={relatedSong.id}>
+                <Link
+                  href={`/song/${relatedSong.id}`}
+                  className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
+                >
+                  <span>{relatedSong.title}</span>
+                  <span>{relatedSong.length}</span>
+                </Link>
+              </li>
+            ))}
         </div>
       )}
-    </main>
+    </div>
   );
 }

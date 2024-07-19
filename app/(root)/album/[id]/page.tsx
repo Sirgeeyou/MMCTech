@@ -11,11 +11,11 @@ export default async function page({ ...props }) {
     return <p>Album not found</p>;
   }
   return (
-    <main className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
+    <div className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
       {data && (
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl">{data?.title}</h1>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             <h3>
               <p className="text-neutral-500">
                 Album by{" "}
@@ -38,23 +38,20 @@ export default async function page({ ...props }) {
             <h4 className="text-neutral-500 pb-2">
               {data.title} contains the following songs:
             </h4>
-            {data.songs && (
-              <ul>
-                {data.songs.map((song) => (
-                  <Link
-                    href={`/song/${song.id}`}
-                    key={song.id}
-                    className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
-                  >
-                    <li className="py-1.5">{song.title}</li>
-                    <span>{song.length}</span>
-                  </Link>
-                ))}
-              </ul>
-            )}
+            {data.songs &&
+              data.songs.map((song) => (
+                <Link
+                  key={song.id}
+                  href={`/song/${song.id}`}
+                  className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
+                >
+                  <span>{song.title}</span>
+                  <span>{song.length}</span>
+                </Link>
+              ))}
           </div>
         </div>
       )}
-    </main>
+    </div>
   );
 }
