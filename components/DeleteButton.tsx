@@ -4,18 +4,28 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "./LoadingSpinner";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface DeleteButtonProps {
   id: number;
-  deleteFunction: (params: {
-    id: number;
-  }) => Promise<{
+  description: string;
+  deleteFunction: (params: { id: number }) => Promise<{
     error?: { title: string; description: string };
     success?: { title: string; description: string };
   }>;
 }
 
-function DeleteButton({ id, deleteFunction }: DeleteButtonProps) {
+function DeleteButton({ id, deleteFunction, description }: DeleteButtonProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -43,13 +53,27 @@ function DeleteButton({ id, deleteFunction }: DeleteButtonProps) {
   };
 
   return (
-    <Button
-      variant="destructive"
-      onClick={handleDelete}
-      disabled={isSubmitting}
-    >
-      {isSubmitting ? <LoadingSpinner /> : <span>Delete</span>}
-    </Button>
+    <AlertDialog>
+      <AlertDialogTrigger>
+        <Button variant="destructive">Delete</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>{" "}
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? <LoadingSpinner /> : <span>Delete</span>}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 

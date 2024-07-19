@@ -29,6 +29,7 @@ export default async function page({ ...props }) {
               <DeleteButton
                 id={props.params.id}
                 deleteFunction={deleteAlbumById}
+                description="This action cannot be undone. This will permanently delete the album and its songs."
               />
             </div>
           </div>

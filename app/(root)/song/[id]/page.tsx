@@ -41,7 +41,11 @@ export default async function page({ ...props }) {
         </div>
         <div className="flex gap-5">
           <EditSong song={song} />
-          <DeleteButton id={props.params.id} deleteFunction={deleteSongById} />
+          <DeleteButton
+            id={props.params.id}
+            deleteFunction={deleteSongById}
+            description="This action cannot be undone. This will permanently delete the song."
+          />
         </div>
       </div>
 
