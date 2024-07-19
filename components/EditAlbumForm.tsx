@@ -20,16 +20,17 @@ import { transformSongLength } from "@/utils/helpers/parseLength";
 import { useParams } from "next/navigation";
 import { updateSong } from "@/lib/actions/songs";
 import { Album } from "@/types";
+import { updateAlbum } from "@/lib/actions/albums";
 
 const albumSchema = z.object({
   title: z.string().min(1, "Album title is required."),
   description: z.string().min(1, "Album description is required."),
   artists: z
     .object({
-      id: z.number().optional(), // Adjusted to be optional
+      id: z.number(),
       name: z.string().min(1, "Artist name is required."),
     })
-    .nullable(), // Allow null
+    .nullable(),
   songs: z.array(
     z.object({
       id: z.number().nullable(),
@@ -44,8 +45,6 @@ const albumSchema = z.object({
     })
   ),
 });
-
-interface Song extends Tables<"songs"> {}
 
 type AlbumFormType = z.infer<typeof albumSchema>;
 
@@ -69,7 +68,9 @@ function EditAlbumForm({
 
   const params = useParams();
 
-  const onSubmit = async (values: AlbumFormType) => {};
+  const onSubmit = async (values: AlbumFormType) => {
+    const res = await updateAlbum(params.id as string, values);
+  };
 
   return (
     <FormProvider {...form}>

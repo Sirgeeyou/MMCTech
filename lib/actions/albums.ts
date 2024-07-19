@@ -1,5 +1,6 @@
 "use server";
 
+import { Album } from "@/types";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
@@ -14,7 +15,7 @@ export async function getAlbumDetails(id: number) {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("albums")
-    .select(`title, description, songs(id,title, length), artists(name)`)
+    .select(`title, description, songs(id,title, length), artists(id, name)`)
     .eq("id", id)
     .single();
 
@@ -91,4 +92,9 @@ export async function createAlbum({
       description: "Your album has been successfully added!",
     },
   };
+}
+
+export async function updateAlbum(albumId: string, album: Album) {
+  const supabase = createClient();
+  const { title, description } = album;
 }
