@@ -54,30 +54,28 @@ const GlobalSearch = () => {
   }, [search, pathname, router, searchParams]);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <div className="relative w-full max-w-[600px]" ref={searchContainerRef}>
-        <div className="flex grow items-center h-11 relative">
-          <Search className="size-6 absolute top-2 right-2" />
-          <Input
-            type="text"
-            placeholder="Search globally"
-            value={search}
-            onChange={(e) => {
-              setSearch(e.target.value);
-              if (!isOpen) setIsOpen(true);
+    <div className="relative w-full max-w-[600px]" ref={searchContainerRef}>
+      <div className="flex grow items-center h-11 relative">
+        <Search className="size-6 absolute top-2 right-2" />
+        <Input
+          type="text"
+          placeholder="Search globally"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            if (!isOpen) setIsOpen(true);
 
-              if (e.target.value === "" && isOpen) setIsOpen(false);
-            }}
-            className={search && "text-muted-foreground"}
-          />
-        </div>
-        {isOpen && (
-          <Suspense fallback={<div>Loading...</div>}>
-            <GlobalResult />
-          </Suspense>
-        )}
+            if (e.target.value === "" && isOpen) setIsOpen(false);
+          }}
+          className={search && "text-muted-foreground"}
+        />
       </div>
-    </Suspense>
+      {isOpen && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <GlobalResult />
+        </Suspense>
+      )}
+    </div>
   );
 };
 

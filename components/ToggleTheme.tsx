@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ComputerIcon, Moon, Sun } from "lucide-react";
+import { LaptopMinimal, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button";
 
 export default function ThemeToggle(props: {
@@ -21,7 +21,7 @@ export default function ThemeToggle(props: {
   const triggerIcon = {
     light: <Sun className="h-6 w-6" />,
     dark: <Moon className="h-6 w-6" />,
-    system: <ComputerIcon className="h-6 w-6" />,
+    system: <LaptopMinimal className="h-6 w-6" />,
   }[theme as "light" | "dark" | "system"];
 
   return (
@@ -47,7 +47,7 @@ export default function ThemeToggle(props: {
           <span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          <ComputerIcon className="mr-2 h-4 w-4" />
+          <LaptopMinimal className="mr-2 h-4 w-4" />
           <span>System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
