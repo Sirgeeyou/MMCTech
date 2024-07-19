@@ -58,7 +58,7 @@ export default async function page({ ...props }) {
               <Link
                 key={relatedSong.id}
                 href={`/song/${relatedSong.id}`}
-                className="flex justify-between hover:bg-accent items-center rounded-md  my-2 py-1.5"
+                className="flex justify-between hover:bg-accent items-center rounded-md  my-2 p-2"
               >
                 <span>{relatedSong.title}</span>
                 <span>{relatedSong.length}</span>

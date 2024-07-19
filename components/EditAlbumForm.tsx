@@ -160,17 +160,10 @@ function EditAlbumForm({
             type="button"
             onClick={() => append({ title: "", length: "00:00" })}
           >
-            Add Song
+            Add Another Song
           </Button>
         </div>
         <div className="flex justify-between">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            {form.formState.isSubmitting ? (
-              <LoadingSpinner />
-            ) : (
-              <span>Submit</span>
-            )}
-          </Button>
           <span
             className={`hover:cursor-pointer ${buttonVariants({
               variant: "secondary",
@@ -179,6 +172,13 @@ function EditAlbumForm({
           >
             Cancel
           </span>
+          <Button type="submit" disabled={form.formState.isSubmitting}>
+            {form.formState.isSubmitting ? (
+              <LoadingSpinner />
+            ) : (
+              <span>Submit</span>
+            )}
+          </Button>
         </div>
       </form>
     </FormProvider>

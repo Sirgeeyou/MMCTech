@@ -131,6 +131,12 @@ function EditSongForm({
           />
         </div>
         <div className="flex justify-between">
+          <span
+            className={buttonVariants({ variant: "secondary" })}
+            onClick={() => setIsOpen(false)}
+          >
+            Cancel
+          </span>
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <LoadingSpinner />
@@ -138,13 +144,6 @@ function EditSongForm({
               <span>Submit</span>
             )}
           </Button>
-
-          <span
-            className={buttonVariants({ variant: "secondary" })}
-            onClick={() => setIsOpen(false)}
-          >
-            Cancel
-          </span>
         </div>
       </form>
     </FormProvider>

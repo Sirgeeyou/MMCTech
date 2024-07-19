@@ -339,12 +339,19 @@ function AddListingForm({
               type="button"
               onClick={() => append({ title: "", minutes: 0, seconds: 0 })}
             >
-              Add Song
+              Add Another Song
             </Button>
           </>
         )}
 
         <div className="flex justify-between">
+          <span
+            className={buttonVariants({ variant: "secondary" })}
+            onClick={() => setIsOpen(false)}
+          >
+            Cancel
+          </span>
+
           <Button type="submit" disabled={form.formState.isSubmitting}>
             {form.formState.isSubmitting ? (
               <LoadingSpinner />
@@ -352,13 +359,6 @@ function AddListingForm({
               <span>Submit</span>
             )}
           </Button>
-
-          <span
-            className={buttonVariants({ variant: "secondary" })}
-            onClick={() => setIsOpen(false)}
-          >
-            Cancel
-          </span>
         </div>
       </form>
     </FormProvider>

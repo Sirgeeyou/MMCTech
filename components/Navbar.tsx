@@ -1,6 +1,5 @@
 import Link from "next/link";
 import AuthButton from "./AuthButton";
-import { ToggleTheme } from "./ToggleTheme";
 import { createClient } from "@/utils/supabase/server";
 import GlobalSearch from "./search/GlobarSearch";
 
