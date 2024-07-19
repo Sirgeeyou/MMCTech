@@ -1,38 +1,54 @@
 "use client";
 
 import * as React from "react";
-import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ComputerIcon, Moon, Sun } from "lucide-react";
+import { Button } from "./ui/button";
 
-export function ToggleTheme() {
-  const { setTheme } = useTheme();
+export default function ThemeToggle(props: {
+  align?: "center" | "start" | "end";
+  side?: "top" | "bottom";
+}) {
+  const { setTheme, theme } = useTheme();
+
+  const triggerIcon = {
+    light: <Sun className="h-6 w-6" />,
+    dark: <Moon className="h-6 w-6" />,
+    system: <ComputerIcon className="h-6 w-6" />,
+  }[theme as "light" | "dark" | "system"];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="size-11">
-          <Sun className="h-[30px] w-[30] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-[30px] w-[30px] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1 px-2 text-lg font-semibold md:text-base"
+        >
+          {triggerIcon}
+          <span className="capitalize">{theme}</span>
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align={props.align} side={props.side}>
         <DropdownMenuItem onClick={() => setTheme("light")}>
-          Light
+          <Sun className="mr-2 h-4 w-4" />
+          <span>Light</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("dark")}>
-          Dark
+          <Moon className="mr-2 h-4 w-4" />
+          <span>Dark</span>
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>
-          System
+          <ComputerIcon className="mr-2 h-4 w-4" />
+          <span>System</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
