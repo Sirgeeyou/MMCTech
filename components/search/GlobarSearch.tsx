@@ -54,7 +54,7 @@ const GlobalSearch = () => {
   }, [search, pathname, router, searchParams]);
 
   return (
-    <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
       <div className="relative w-full max-w-[600px]" ref={searchContainerRef}>
         <div className="flex grow items-center h-11 relative">
           <Search className="size-6 absolute top-2 right-2" />
