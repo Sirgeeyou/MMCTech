@@ -10,7 +10,7 @@ function LatestMusic({ songs }: { songs: Song[] }) {
   return (
     <section className="w-full pb-10 px-5">
       <h1 className="mt-10 mb-7 ml-5 text-3xl">Latest Songs</h1>
-      <ScrollArea className="flex h-[500px] w-full rounded-md border hover:border-primary/25">
+      <ScrollArea className="flex h-[500px] w-full rounded-md border hover:border-primary/25 py-5">
         <div className="ml-5 flex gap-4 flex-wrap">
           {songs?.map((song) => (
             <Link key={song.id} href={`/song/${song.id}`}>
