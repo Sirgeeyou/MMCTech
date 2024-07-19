@@ -16,6 +16,7 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { useParams } from "next/navigation";
 import { Album } from "@/types";
 import { updateAlbum } from "@/lib/actions/albums";
+import { toast } from "sonner";
 
 const albumSchema = z.object({
   title: z.string().min(1, "Album title is required."),
@@ -63,6 +64,18 @@ function EditAlbumForm({
 
   const onSubmit = async (values: AlbumFormType) => {
     const res = await updateAlbum(params.id as string, values);
+    if (res.error) {
+      toast.error(`${res.error?.title}`, {
+        description: `${res.error?.description}`,
+      });
+      setIsOpen(false);
+    }
+    if (res.success) {
+      toast.success(`${res.success?.title}`, {
+        description: `${res.success?.description}`,
+      });
+      setIsOpen(false);
+    }
   };
 
   return (
