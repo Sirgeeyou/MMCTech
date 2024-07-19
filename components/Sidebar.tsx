@@ -19,7 +19,6 @@ async function Sidebar() {
           <Home />
           <Link href={"/"}>Home</Link>
         </div>
-        <span>Search placeholder</span>
         <Separator />
         <div className="flex flex-col gap-3">
           <div className="flex gap-2">

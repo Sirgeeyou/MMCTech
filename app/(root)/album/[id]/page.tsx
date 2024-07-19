@@ -1,6 +1,5 @@
 import DeleteButton from "@/components/DeleteButton";
 import EditAlbum from "@/components/EditAlbum";
-import { Button } from "@/components/ui/button";
 import { deleteAlbumById, getAlbumDetails } from "@/lib/actions/albums";
 import Link from "next/link";
 

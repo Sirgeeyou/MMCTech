@@ -1,6 +1,5 @@
 import Link from "next/link";
 import AuthButton from "./AuthButton";
-import { createClient } from "@/utils/supabase/server";
 import GlobalSearch from "./search/GlobarSearch";
 import Image from "next/image";
 

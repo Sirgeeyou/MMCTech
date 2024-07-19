@@ -9,7 +9,6 @@ import {
 import { buttonVariants } from "./ui/button";
 import { useState } from "react";
 import EditArtistForm from "./EditArtistForm";
-import { useParams } from "next/navigation";
 
 function EditArtist() {
   const [isOpen, setIsOpen] = useState(false);

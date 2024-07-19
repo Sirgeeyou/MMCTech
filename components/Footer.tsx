@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ToggleTheme } from "./ToggleTheme";
-import { createClient } from "@/utils/supabase/server";
 import Image from "next/image";
 
 async function Footer() {

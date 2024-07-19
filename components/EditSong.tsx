@@ -2,12 +2,11 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button, buttonVariants } from "./ui/button";
+import { buttonVariants } from "./ui/button";
 import EditSongForm from "./EditSongForm";
 import { useState } from "react";
 import { Tables } from "@/types/types_db";

@@ -6,7 +6,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
-import console from "console";
 import EditArtist from "@/components/EditArtist";
 import DeleteButton from "@/components/DeleteButton";
 
