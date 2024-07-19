@@ -9,7 +9,7 @@ import Link from "next/link";
 import EditArtist from "@/components/EditArtist";
 import DeleteButton from "@/components/DeleteButton";
 
-export default async function page({ ...props }) {
+export default async function ArtistPage({ ...props }) {
   const artistName = props.params.slug;
   const data = await getArtistRelatedMusic(props.params.id)!;
   if (data === null) {

@@ -19,7 +19,7 @@ interface Album extends Tables<"albums"> {
   songs: Song[];
 }
 
-export default async function page({ ...props }) {
+export default async function SongPage({ ...props }) {
   const song = await getSongById(props.params.id);
   if (!song) {
     return <div>Song not found.</div>;

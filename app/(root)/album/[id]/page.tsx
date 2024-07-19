@@ -3,7 +3,7 @@ import EditAlbum from "@/components/EditAlbum";
 import { deleteAlbumById, getAlbumDetails } from "@/lib/actions/albums";
 import Link from "next/link";
 
-export default async function page({ ...props }) {
+export default async function AlbumPage({ ...props }) {
   const data = await getAlbumDetails(props.params.id);
 
   if (data === null) {
