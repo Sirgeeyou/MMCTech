@@ -8,4 +8,18 @@
 - **Dark/Light** theme.
 - **Modern Minimal** design.
 
-## How to
+## How to run locally
+
+- Clone repo
+
+  > git clone https://github.com/Sirgeeyou/MMCTech
+
+- Install dependencies
+
+  > pnpm i
+
+- Env variables
+  **(please refer to the env variables sent via email)**
+
+- Run the project
+  > pnpm dev
