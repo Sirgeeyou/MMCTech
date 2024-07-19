@@ -11,11 +11,13 @@ export async function getAlbums() {
   return data || [];
 }
 
-export async function getAlbumDetails(id: number) {
+export async function getAlbumDetails(id: number): Promise<Album | null> {
   const supabase = createClient();
   const { data, error } = await supabase
     .from("albums")
-    .select(`title, description, songs(id,title, length), artists(id, name)`)
+    .select(
+      `id, title, description, songs(id, title, length), artists(id, name)`
+    )
     .eq("id", id)
     .single();
 
@@ -24,7 +26,12 @@ export async function getAlbumDetails(id: number) {
     return null;
   }
 
-  return data || [];
+  if (!data.artists) {
+    console.error("Artists data is missing");
+    return null;
+  }
+
+  return data as Album;
 }
 
 interface CreateAlbum {
@@ -96,5 +103,38 @@ export async function createAlbum({
 
 export async function updateAlbum(albumId: string, album: Album) {
   const supabase = createClient();
-  const { title, description } = album;
+  console.log(album);
+  const { title, description, artists: artist, songs } = album;
+  try {
+    await supabase
+      .from("artists")
+      .update({ name: artist.name })
+      .eq("id", artist.id);
+
+    await supabase
+      .from("albums")
+      .update({ title, description })
+      .eq("id", albumId);
+
+    const songsToUpsert = songs.map((song) => ({
+      album_id: parseInt(albumId),
+      title: song.title,
+      length: song.length,
+      artist_id: artist.id,
+    }));
+    await supabase.from("songs").upsert(songsToUpsert);
+  } catch (error) {
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while editing the album.",
+      },
+    };
+  }
+  return {
+    success: {
+      title: "Congratulations!",
+      description: "Your album has been successfully edited!",
+    },
+  };
 }

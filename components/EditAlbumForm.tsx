@@ -13,27 +13,20 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { toast } from "sonner";
-import { formatLength } from "@/utils/helpers/formatLength";
-import { Tables } from "@/types/types_db";
-import { transformSongLength } from "@/utils/helpers/parseLength";
 import { useParams } from "next/navigation";
-import { updateSong } from "@/lib/actions/songs";
 import { Album } from "@/types";
 import { updateAlbum } from "@/lib/actions/albums";
 
 const albumSchema = z.object({
   title: z.string().min(1, "Album title is required."),
   description: z.string().min(1, "Album description is required."),
-  artists: z
-    .object({
-      id: z.number(),
-      name: z.string().min(1, "Artist name is required."),
-    })
-    .nullable(),
+  artists: z.object({
+    id: z.number(),
+    name: z.string().min(1, "Artist name is required."),
+  }),
   songs: z.array(
     z.object({
-      id: z.number().nullable(),
+      id: z.number().optional(),
       title: z.string().min(1, "Song title is required."),
       length: z
         .string()
@@ -152,7 +145,7 @@ function EditAlbumForm({
           <Button
             className="mt-6"
             type="button"
-            onClick={() => append({ id: null, title: "", length: "00:00" })}
+            onClick={() => append({ title: "", length: "00:00" })}
           >
             Add Song
           </Button>

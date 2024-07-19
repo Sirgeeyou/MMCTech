@@ -4,7 +4,7 @@ export interface Artist {
 }
 
 export interface Song {
-  id: number;
+  id?: number;
   title: string;
   length: string;
 }
@@ -13,5 +13,5 @@ export interface Album {
   title: string;
   description: string;
   songs: Song[];
-  artists: Artist | null;
+  artists: Artist;
 }

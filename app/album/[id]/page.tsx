@@ -1,11 +1,10 @@
 import EditAlbum from "@/components/EditAlbum";
 import { Button } from "@/components/ui/button";
 import { getAlbumDetails } from "@/lib/actions/albums";
-import { Album } from "@/types";
 import Link from "next/link";
 
 export default async function page({ ...props }) {
-  const data: Album | null = await getAlbumDetails(props.params.id);
+  const data = await getAlbumDetails(props.params.id);
 
   if (data === null) {
     return <p>Album not found</p>; // Handle the case where the album is not found
