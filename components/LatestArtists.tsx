@@ -9,7 +9,7 @@ function LatestArtists({ artists }: { artists: Artist[] }) {
   return (
     <section>
       <h1 className="my-10 ml-5 text-3xl">Popular Artists</h1>
-      <div className="flex gap-12 mx-4 ">
+      <div className="flex gap-12 mx-4 overflow-x-auto">
         {artists?.map((artist) => (
           <Link key={artist.id} href={`/artist/${artist.id}/${artist.name}`}>
             <div className="flex flex-col hover:bg-accent rounded-md">

@@ -1,19 +1,28 @@
 "use client";
-import { deleteSong } from "@/lib/actions/songs";
 import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { LoadingSpinner } from "./LoadingSpinner";
 
-function DeleteButton({ id }: { id: number }) {
+interface DeleteButtonProps {
+  id: number;
+  deleteFunction: (params: {
+    id: number;
+  }) => Promise<{
+    error?: { title: string; description: string };
+    success?: { title: string; description: string };
+  }>;
+}
+
+function DeleteButton({ id, deleteFunction }: DeleteButtonProps) {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleDelete = async () => {
     setIsSubmitting(true);
     try {
-      const res = await deleteSong({ id });
+      const res = await deleteFunction({ id });
       if (res.error) {
         toast.error(res.error.title, {
           description: res.error.description,
@@ -26,7 +35,7 @@ function DeleteButton({ id }: { id: number }) {
       }
     } catch (error) {
       toast.error("Unexpected Error", {
-        description: "An unexpected error occurred while removing the song.",
+        description: "An unexpected error occurred while removing the item.",
       });
     } finally {
       setIsSubmitting(false);
@@ -34,7 +43,11 @@ function DeleteButton({ id }: { id: number }) {
   };
 
   return (
-    <Button variant="destructive" onClick={handleDelete}>
+    <Button
+      variant="destructive"
+      onClick={handleDelete}
+      disabled={isSubmitting}
+    >
       {isSubmitting ? <LoadingSpinner /> : <span>Delete</span>}
     </Button>
   );

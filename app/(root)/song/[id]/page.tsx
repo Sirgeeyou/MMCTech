@@ -22,7 +22,6 @@ interface Album extends Tables<"albums"> {
 
 export default async function page({ ...props }) {
   const song = await getSongById(props.params.id);
-
   if (!song) {
     return <div>Song not found.</div>;
   }
@@ -42,7 +41,7 @@ export default async function page({ ...props }) {
         </div>
         <div className="flex gap-5">
           <EditSong song={song} />
-          <DeleteButton id={props.params.id} />
+          <DeleteButton id={props.params.id} deleteFunction={deleteSong} />
         </div>
       </div>
 

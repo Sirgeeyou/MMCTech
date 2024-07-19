@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import console from "console";
 import EditArtist from "@/components/EditArtist";
+import DeleteButton from "@/components/DeleteButton";
 
 export default async function page({ ...props }) {
   const artistName = props.params.slug;
@@ -26,7 +27,10 @@ export default async function page({ ...props }) {
           <h2 className="mt-8 text-neutral-500 pl-6">
             Albums available by {artistName}
           </h2>
-          <EditArtist />
+          <div className="flex gap-5">
+            <EditArtist />
+            {/* <DeleteButton id={props.params.id} /> */}
+          </div>
         </div>
         {data?.map((album) => (
           <Accordion
