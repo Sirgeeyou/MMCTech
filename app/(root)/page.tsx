@@ -11,10 +11,10 @@ export default async function HomePage() {
   const songs = await getSongs();
 
   return (
-    <main className="flex-1 flex flex-col gap-6  w-4/5 overflow-hidden">
+    <div className="flex-col w-4/5">
       <LatestArtists artists={artists} />
       <PopularAlbums albums={albums} />
       <LatestMusic songs={songs} />
-    </main>
+    </div>
   );
 }

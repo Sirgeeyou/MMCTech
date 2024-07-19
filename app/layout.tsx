@@ -1,18 +1,17 @@
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from "next";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const metadata = {
+export const metadata: Metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: "Musify",
+  description: "Fastest growing and most popular music searching platform.",
 };
 
 export default function RootLayout({
@@ -22,18 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={GeistSans.className}>
-      <body className="bg-background text-foreground">
+      <body className="bg-background min-h-screen antialiased">
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="min-h-screen flex">
-            <Sidebar className="w-1/5" />
-            {children}
-          </main>
+          {children}
           <Toaster position="top-right" />
         </ThemeProvider>
       </body>
