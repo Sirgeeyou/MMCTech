@@ -41,7 +41,7 @@ export async function deleteArtistById(params: DeleteArtistById) {
     return {
       error: {
         title: "Unexpected Error",
-        description: "An unexpected error occurred while removing the song.",
+        description: "An unexpected error occurred while removing the artist.",
       },
     };
   }

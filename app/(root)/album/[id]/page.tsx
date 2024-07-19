@@ -1,13 +1,14 @@
+import DeleteButton from "@/components/DeleteButton";
 import EditAlbum from "@/components/EditAlbum";
 import { Button } from "@/components/ui/button";
-import { getAlbumDetails } from "@/lib/actions/albums";
+import { deleteAlbumById, getAlbumDetails } from "@/lib/actions/albums";
 import Link from "next/link";
 
 export default async function page({ ...props }) {
   const data = await getAlbumDetails(props.params.id);
 
   if (data === null) {
-    return <p>Album not found</p>; 
+    return <p>Album not found</p>;
   }
   return (
     <main className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
@@ -25,7 +26,10 @@ export default async function page({ ...props }) {
             </h3>
             <div className="flex gap-5">
               <EditAlbum album={data} />
-              <Button variant="destructive">Delete</Button>
+              <DeleteButton
+                id={props.params.id}
+                deleteFunction={deleteAlbumById}
+              />
             </div>
           </div>
           <h4 className="text-md">{data.description}</h4>

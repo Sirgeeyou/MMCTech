@@ -138,3 +138,31 @@ export async function updateAlbum(albumId: string, album: Album) {
     },
   };
 }
+
+interface DeleteAlbumById {
+  id: number;
+}
+
+export async function deleteAlbumById(params: DeleteAlbumById) {
+  const supabase = createClient();
+
+  const { id } = params;
+
+  try {
+    const { error } = await supabase.from("albums").delete().eq("id", id);
+    revalidatePath("/");
+  } catch (error) {
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while removing the album.",
+      },
+    };
+  }
+  return {
+    success: {
+      title: "Artist deleted!",
+      description: "The artist has been successfuly deleted!",
+    },
+  };
+}
