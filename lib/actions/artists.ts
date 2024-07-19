@@ -16,9 +16,8 @@ export async function getArtistRelatedMusic(artistId: number) {
   // Fetch albums and their songs for the given artist
   const { data: albumsData, error: albumsError } = await supabase
     .from("albums")
-    .select(`id, title, description, songs (id, title, length)`)
+    .select(`id, title, description, songs (id, title, length), artists (name)`)
     .eq("artist_id", artistId);
-
   if (albumsError) {
     console.error("Error fetching albums details:", albumsError);
     return null;

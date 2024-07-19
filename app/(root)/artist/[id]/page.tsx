@@ -9,26 +9,29 @@ import Link from "next/link";
 import EditArtist from "@/components/EditArtist";
 import DeleteButton from "@/components/DeleteButton";
 
-export default async function ArtistPage({ ...props }) {
-  const artistName = props.params.slug;
-  const data = await getArtistRelatedMusic(props.params.id)!;
+interface PageProps {
+  params: { id: number };
+}
+
+export default async function ArtistPage({ params }: PageProps) {
+  const data = await getArtistRelatedMusic(params.id)!;
   if (data === null) {
     return <p>Album not found</p>;
   }
   return (
     <div className="md:w-4/5 w-full overflow-hidden flex flex-col rounded-md">
       <div className="w-full bg-gradient-to-r from-slate-500 to-transparent pl-6 py-10">
-        <h1 className="font-bold text-4xl">{artistName}</h1>
+        <h1 className="font-bold text-4xl">{data.albums[0].artists?.name}</h1>
       </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center pr-6 mt-6">
           <h2 className="text-neutral-500 pl-6">
-            Albums available by {artistName}
+            Albums available by {data.albums[0].artists?.name}
           </h2>
           <div className="flex gap-5 items-center">
             <EditArtist />
             <DeleteButton
-              id={props.params.id}
+              id={params.id}
               deleteFunction={deleteArtistById}
               description="This action cannot be undone. This will permanently delete the artist and its albums and songs."
             />

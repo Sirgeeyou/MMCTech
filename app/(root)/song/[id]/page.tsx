@@ -19,8 +19,12 @@ interface Album extends Tables<"albums"> {
   songs: Song[];
 }
 
-export default async function SongPage({ ...props }) {
-  const song = await getSongById(props.params.id);
+interface PageProps {
+  params: { id: number };
+}
+
+export default async function SongPage({ params }: PageProps) {
+  const song = await getSongById(params.id);
   if (!song) {
     return <div>Song not found.</div>;
   }
@@ -41,7 +45,7 @@ export default async function SongPage({ ...props }) {
         <div className="flex gap-5">
           <EditSong song={song} />
           <DeleteButton
-            id={props.params.id}
+            id={params.id}
             deleteFunction={deleteSongById}
             description="This action cannot be undone. This will permanently delete the song."
           />

@@ -3,8 +3,12 @@ import EditAlbum from "@/components/EditAlbum";
 import { deleteAlbumById, getAlbumDetails } from "@/lib/actions/albums";
 import Link from "next/link";
 
-export default async function AlbumPage({ ...props }) {
-  const data = await getAlbumDetails(props.params.id);
+interface PageProps {
+  params: { id: number };
+}
+
+export default async function AlbumPage({ params }: PageProps) {
+  const data = await getAlbumDetails(params.id);
 
   if (data === null) {
     return <p>Album not found</p>;
@@ -26,7 +30,7 @@ export default async function AlbumPage({ ...props }) {
             <div className="flex gap-5">
               <EditAlbum album={data} />
               <DeleteButton
-                id={props.params.id}
+                id={params.id}
                 deleteFunction={deleteAlbumById}
                 description="This action cannot be undone. This will permanently delete the album and its songs."
               />
