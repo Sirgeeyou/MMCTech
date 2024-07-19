@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function getArtists() {
   const supabase = createClient();
@@ -22,4 +23,32 @@ export async function getArtistRelatedMusic(artistId: number) {
   }
 
   return data || [];
+}
+
+interface DeleteArtistById {
+  id: number;
+}
+
+export async function deleteArtistById(params: DeleteArtistById) {
+  const supabase = createClient();
+
+  const { id } = params;
+
+  try {
+    const { error } = await supabase.from("artists").delete().eq("id", id);
+    revalidatePath("/");
+  } catch (error) {
+    return {
+      error: {
+        title: "Unexpected Error",
+        description: "An unexpected error occurred while removing the song.",
+      },
+    };
+  }
+  return {
+    success: {
+      title: "Artist deleted!",
+      description: "The artist has been successfuly deleted!",
+    },
+  };
 }

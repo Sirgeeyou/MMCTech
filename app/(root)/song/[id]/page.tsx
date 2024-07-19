@@ -2,7 +2,7 @@ import DeleteButton from "@/components/DeleteButton";
 import EditSong from "@/components/EditSong";
 import { Button } from "@/components/ui/button";
 import {
-  deleteSong,
+  deleteSongById,
   getSongById,
   getSongsFromSameAlbum,
 } from "@/lib/actions/songs";
@@ -41,7 +41,7 @@ export default async function page({ ...props }) {
         </div>
         <div className="flex gap-5">
           <EditSong song={song} />
-          <DeleteButton id={props.params.id} deleteFunction={deleteSong} />
+          <DeleteButton id={props.params.id} deleteFunction={deleteSongById} />
         </div>
       </div>
 

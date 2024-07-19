@@ -1,4 +1,4 @@
-import { getArtistRelatedMusic } from "@/lib/actions/artists";
+import { deleteArtistById, getArtistRelatedMusic } from "@/lib/actions/artists";
 import {
   Accordion,
   AccordionContent,
@@ -29,7 +29,10 @@ export default async function page({ ...props }) {
           </h2>
           <div className="flex gap-5">
             <EditArtist />
-            {/* <DeleteButton id={props.params.id} /> */}
+            <DeleteButton
+              id={props.params.id}
+              deleteFunction={deleteArtistById}
+            />
           </div>
         </div>
         {data?.map((album) => (

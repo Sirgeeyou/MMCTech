@@ -129,7 +129,7 @@ interface DeleteSongById {
   id: number;
 }
 
-export async function deleteSong(params: DeleteSongById) {
+export async function deleteSongById(params: DeleteSongById) {
   const supabase = createClient();
 
   const { id } = params;
