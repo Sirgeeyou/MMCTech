@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <main className="flex flex-col min-h-screen w-full">
       <Navbar />
       <div className="w-full flex">
-        <Sidebar className="w-1/5 max-w-[280px]" />
+        <Sidebar />
         {children}
       </div>
     </main>

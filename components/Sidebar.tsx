@@ -5,16 +5,14 @@ import { Home, Library } from "lucide-react";
 import AddListing from "./AddListing";
 import { createClient } from "@/utils/supabase/server";
 
-async function Sidebar({ className }: { className: string }) {
+async function Sidebar() {
   const supabase = createClient();
 
   const {
     data: { user },
   } = await supabase.auth.getUser();
   return (
-    <div
-      className={cn(className, "border-r border-r-foreground/10 min-h-screen")}
-    >
+    <div className="border-r border-r-foreground/10 min-h-screen w-1/5 max-w-[280px] hidden md:block">
       <div className="flex flex-col gap-4 p-4">
         <div className="flex gap-2">
           <Home />

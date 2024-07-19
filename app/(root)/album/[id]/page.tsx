@@ -11,7 +11,7 @@ export default async function page({ ...props }) {
     return <p>Album not found</p>;
   }
   return (
-    <div className="w-4/5 overflow-hidden flex flex-col rounded-md p-6">
+    <div className="md:w-4/5 overflow-hidden flex flex-col rounded-md p-6 w-full">
       {data && (
         <div className="flex flex-col gap-4">
           <h1 className="text-4xl">{data?.title}</h1>
@@ -43,7 +43,7 @@ export default async function page({ ...props }) {
                 <Link
                   key={song.id}
                   href={`/song/${song.id}`}
-                  className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
+                  className="flex justify-between hover:bg-accent items-center rounded-md my-2 py-1.5"
                 >
                   <span>{song.title}</span>
                   <span>{song.length}</span>

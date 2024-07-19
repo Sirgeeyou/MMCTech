@@ -55,15 +55,14 @@ export default async function page({ ...props }) {
           {songsFromSameAlbum.songs
             .filter((s) => s.id !== song.id)
             .map((relatedSong) => (
-              <li key={relatedSong.id}>
-                <Link
-                  href={`/song/${relatedSong.id}`}
-                  className="flex justify-between hover:bg-accent items-center rounded-md px-3 my-2"
-                >
-                  <span>{relatedSong.title}</span>
-                  <span>{relatedSong.length}</span>
-                </Link>
-              </li>
+              <Link
+                key={relatedSong.id}
+                href={`/song/${relatedSong.id}`}
+                className="flex justify-between hover:bg-accent items-center rounded-md  my-2 py-1.5"
+              >
+                <span>{relatedSong.title}</span>
+                <span>{relatedSong.length}</span>
+              </Link>
             ))}
         </div>
       )}
