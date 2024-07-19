@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ToggleTheme } from "./ToggleTheme";
+// import { ToggleTheme } from "./ToggleTheme";
 import Image from "next/image";
 
 async function Footer() {
@@ -10,7 +10,7 @@ async function Footer() {
           <Image height={64} width={64} src={"/logo.png"} alt="Logo" />
         </Link>
 
-        <ToggleTheme />
+        {/* <ToggleTheme /> */}
       </div>
     </footer>
   );
